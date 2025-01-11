@@ -1,0 +1,65 @@
+//
+//  PrefixHeader.pch
+//  InkSpace
+//
+//  Created by puyang on 2024/6/15.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+// 引入Foundation和UIKit框架
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+// 定义屏幕宽高
+#define SCREEN_WIDTH ([UIScreen mainScreen].bounds.size.width)
+#define SCREEN_HEIGHT ([UIScreen mainScreen].bounds.size.height)
+
+// 定义一些颜色
+#define UIColorFromRGB(rgbValue) \
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+                green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
+                 blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
+                alpha:1.0]
+
+#define base_url "https://www.supertrend.top/"
+#define base_pic "https://www.supertrend.top/pictures/"
+#define base_wallpapers "https://www.supertrend.top/wallpapers/"
+
+// #define img_random "https://www.supertrend.top/wallpapers/cursor/0?cursor="
+
+//#define base_pic_320 "https://www.supertrend.top/thumbnails320/"
+//#define base_pic_640 "https://www.supertrend.top/thumbnails640/"
+
+// 壁纸相关尺寸缩略图 URL 宏定义
+#define thumbnail320URL(suffix) [NSString stringWithFormat:@"%sthumbnails320/%@", base_url, suffix]
+#define thumbnail640URL(suffix) [NSString stringWithFormat:@"%sthumbnails640/%@", base_url, suffix]
+
+// 分类+分页
+#define base_wallpaper_cursor(category,cursor) [NSString stringWithFormat:@"%scursor/%d?cursor=%d", base_wallpapers, category, cursor]
+
+// 定义完整的点赞 URL 的宏
+#define base_like_wallpaperURL(idk) [NSString stringWithFormat:@"%s%d/like", base_wallpapers, idk]
+
+// hot 排序
+#define base_hot_wallpaperURL(page) [NSString stringWithFormat:@"%sslike?page=%d", base_wallpapers, page]
+
+// new 排序
+#define base_new_wallpaperURL(page) [NSString stringWithFormat:@"%ssid?page=%d", base_wallpapers, page]
+
+// 搜索
+#define base_search_wallpaperURL(content, page) [NSString stringWithFormat:@"%ssearch?search=%@&page=%d", base_url, content, page]
+
+// del
+#define base_del_wallpaperURL(idk) [NSString stringWithFormat:@"%s%d", base_pic, idk]
+
+#import "MJExtension.h"
+#import "AFNetworking.h"
+#import "JXCategoryView.h"
+#import "Masonry.h"
+
+#endif /* PrefixHeader_pch */

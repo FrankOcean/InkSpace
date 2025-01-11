@@ -1,0 +1,71 @@
+//
+//  ViewController.m
+//  InkSpace
+//
+//  Created by puyang on 2024/6/14.
+//
+
+#import "ViewController.h"
+#import "URLFetcher.h"
+
+@implementation ViewController
+
+- (instancetype)initWithCategory:(NSUInteger)category {
+    self = [super init];
+    if (self) {
+        _category = category;
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.history_id = [HomeModel getHistoricIDForCategory:self.category];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = NO;
+    
+}
+
+#pragma mark - BaseListViewController
+
+- (void)fetchInitialData:(void(^)(NSArray *fetchedArray))completion {
+    self.currentPage = 0;
+    [[URLFetcher sharedInstance] fetchURLsWithCategory:self.category andCompletion:^(NSArray * _Nonnull fetchedArray) {
+        HomeModel *model = [fetchedArray lastObject];
+        self.currentPage = model.ID;
+        if (completion) {
+            completion(fetchedArray);
+        }
+    }];
+}
+
+- (void)fetchMoreData:(void(^)(NSArray *fetchedArray))completion {
+    [[URLFetcher sharedInstance] fetchURLsWithCategory:self.category andCurrentId:self.currentPage andCompletion:^(NSArray * _Nonnull fetchedArray) {
+        HomeModel *model = [fetchedArray lastObject];
+        self.currentPage = model.ID;
+        if (completion) {
+            completion(fetchedArray);
+        }
+    }];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    [super scrollViewDidScroll:scrollView];
+//    
+//    UITableView *tableView = (UITableView *)scrollView;
+//    NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
+//    for (NSIndexPath *indexPath in visibleIndexPaths) {
+//        HomeModel *model = self.items[indexPath.row];
+//        if(model.ID >= self.history_id) {
+//            [HomeModel setHistoricID:model.ID forCategory:self.category];
+//        }
+//    }
+//}
+
+@end
+
