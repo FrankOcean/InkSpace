@@ -26,6 +26,7 @@
         _selectedIndex = 0;
         _searchViewHeight = 40;
         _categoryHeight = 44;
+        _buttonWidth = frame.size.width / titles.count;
         [self setupSearchView];
         [self setupUI];
     }
@@ -64,20 +65,15 @@
     self.scrollView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.scrollView];
     
-    // Calculate widths for each title
-    UIFont *titleFont = [UIFont systemFontOfSize:15];
-    CGFloat totalWidth = self.frame.size.width;
-    CGFloat buttonWidth = totalWidth / self.titles.count;
-    
     // Create buttons
     CGFloat currentX = 0;
     for (NSInteger i = 0; i < self.titles.count; i++) {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(currentX, 0, buttonWidth, self.categoryHeight - 2);
+        button.frame = CGRectMake(currentX, 0, self.buttonWidth, self.categoryHeight - 2);
         [button setTitle:self.titles[i] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
-        button.titleLabel.font = titleFont;
+        button.titleLabel.font = [UIFont systemFontOfSize:15];
         button.tag = i;
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self.scrollView addSubview:button];
@@ -86,17 +82,17 @@
         // Calculate title width for indicator
         CGSize titleSize = [self.titles[i] boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, self.frame.size.height)
                                                       options:NSStringDrawingUsesLineFragmentOrigin
-                                                   attributes:@{NSFontAttributeName: titleFont}
+                                                   attributes:@{NSFontAttributeName: button.titleLabel.font}
                                                       context:nil].size;
         [self.titleWidths addObject:@(titleSize.width)];
         
-        currentX += buttonWidth;
+        currentX += self.buttonWidth;
     }
     
     // Setup indicator with initial width
     CGFloat initialWidth = [self.titleWidths[0] floatValue];
     UIButton *firstButton = self.buttons[0];
-    CGFloat indicatorX = firstButton.frame.origin.x + (buttonWidth - initialWidth) / 2;
+    CGFloat indicatorX = firstButton.frame.origin.x + (self.buttonWidth - initialWidth) / 2;
     self.indicatorView = [[UIView alloc] initWithFrame:CGRectMake(indicatorX, self.categoryHeight - 2, initialWidth, 2)];
     self.indicatorView.backgroundColor = [UIColor blackColor];
     [self.scrollView addSubview:self.indicatorView];
@@ -106,13 +102,9 @@
 }
 
 - (void)updateSearchViewWithOffset:(CGFloat)offset {
+    // Only update the category view position, keep search view fixed
     CGFloat maxOffset = self.searchViewHeight;
-    CGFloat alpha = 1 - (offset / maxOffset);
     CGFloat yOffset = -MIN(offset, maxOffset);
-    
-    // Update search view position and alpha
-    self.searchView.alpha = MAX(0, alpha);
-    self.searchView.transform = CGAffineTransformMakeTranslation(0, yOffset);
     
     // Update scrollView position
     CGFloat scrollViewY = MAX(0, self.searchViewHeight + yOffset);
