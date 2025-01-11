@@ -137,17 +137,11 @@
         [button setTitleColor:isSelected ? [UIColor blackColor] : [UIColor grayColor] forState:UIControlStateNormal];
     }
     
+    // 直接更新下划线位置，不使用动画
     UIButton *selectedButton = self.buttons[index];
     CGFloat titleWidth = [self.titleWidths[index] floatValue];
     CGFloat indicatorX = selectedButton.frame.origin.x + (self.buttonWidth - titleWidth) / 2;
-    
-    if (animated) {
-        [UIView animateWithDuration:0.25 animations:^{
-            self.indicatorView.frame = CGRectMake(indicatorX, self.categoryHeight - 2, titleWidth, 2);
-        }];
-    } else {
-        self.indicatorView.frame = CGRectMake(indicatorX, self.categoryHeight - 2, titleWidth, 2);
-    }
+    self.indicatorView.frame = CGRectMake(indicatorX, self.categoryHeight - 2, titleWidth, 2);
     
     // Center the selected button
     CGFloat offsetX = selectedButton.center.x - (self.frame.size.width / 2);
@@ -176,12 +170,21 @@
         }
     }
     
-    // Smooth indicator animation
-    CGFloat leftTitleWidth = [self.titleWidths[leftIndex] floatValue];
-    CGFloat rightTitleWidth = [self.titleWidths[rightIndex] floatValue];
+    [self updateIndicatorFrameWithIndex:leftIndex percent:percent toIndex:rightIndex];
+}
+
+- (void)updateIndicatorFrameWithIndex:(NSInteger)index percent:(CGFloat)percent toIndex:(NSInteger)toIndex {
+    if (index < 0 || toIndex >= self.buttons.count) return;
     
-    CGFloat leftX = self.buttons[leftIndex].frame.origin.x + (self.buttonWidth - leftTitleWidth) / 2;
-    CGFloat rightX = self.buttons[rightIndex].frame.origin.x + (self.buttonWidth - rightTitleWidth) / 2;
+    CGFloat leftTitleWidth = [self.titleWidths[index] floatValue];
+    CGFloat rightTitleWidth = [self.titleWidths[toIndex] floatValue];
+    
+    UIButton *leftButton = self.buttons[index];
+    UIButton *rightButton = self.buttons[toIndex];
+    
+    CGFloat leftX = leftButton.frame.origin.x + (self.buttonWidth - leftTitleWidth) / 2;
+    CGFloat rightX = rightButton.frame.origin.x + (self.buttonWidth - rightTitleWidth) / 2;
+    
     CGFloat indicatorWidth = leftTitleWidth + (rightTitleWidth - leftTitleWidth) * percent;
     CGFloat indicatorX = leftX + (rightX - leftX) * percent;
     

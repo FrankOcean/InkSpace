@@ -82,7 +82,7 @@
 #pragma mark - PYCategoryViewDelegate
 
 - (void)categoryView:(UIView *)categoryView didSelectItemAtIndex:(NSInteger)index {
-    [self.contentScrollView setContentOffset:CGPointMake(index * self.view.frame.size.width, 0) animated:YES];
+    [self.contentScrollView setContentOffset:CGPointMake(index * self.view.frame.size.width, 0) animated:NO];
 }
 
 - (void)categoryView:(UIView *)categoryView didClickSearchButton:(NSString *)searchText {
