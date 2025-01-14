@@ -20,8 +20,6 @@
 		3134E46D2C92A92800B9081A /* HotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3134E46C2C92A92800B9081A /* HotViewController.m */; };
 		3134E46F2C92DDD600B9081A /* gradient_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 3134E46E2C92DDD600B9081A /* gradient_image.png */; };
 		3134E4752C92E74F00B9081A /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3134E4742C92E74F00B9081A /* MyViewController.m */; };
-		3142316B2C91839C00075644 /* ContentBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 314231692C91839C00075644 /* ContentBaseViewController.m */; };
-		314231712C91843F00075644 /* FootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 314231702C91843F00075644 /* FootViewController.m */; };
 		314231762C91888A00075644 /* UIWindow+JXSafeArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 314231752C91888A00075644 /* UIWindow+JXSafeArea.m */; };
 		314231792C91889800075644 /* BaseNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 314231782C91889800075644 /* BaseNavigationViewController.m */; };
 		314659B12C1FE39800B01B5F /* URLFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 314659B02C1FE39800B01B5F /* URLFetcher.m */; };
@@ -75,10 +73,6 @@
 		3134E46E2C92DDD600B9081A /* gradient_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_image.png; sourceTree = "<group>"; };
 		3134E4732C92E74F00B9081A /* MyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
 		3134E4742C92E74F00B9081A /* MyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
-		314231692C91839C00075644 /* ContentBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentBaseViewController.m; sourceTree = "<group>"; };
-		3142316A2C91839C00075644 /* ContentBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentBaseViewController.h; sourceTree = "<group>"; };
-		3142316F2C91843F00075644 /* FootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FootViewController.h; sourceTree = "<group>"; };
-		314231702C91843F00075644 /* FootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FootViewController.m; sourceTree = "<group>"; };
 		314231742C91888A00075644 /* UIWindow+JXSafeArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+JXSafeArea.h"; sourceTree = "<group>"; };
 		314231752C91888A00075644 /* UIWindow+JXSafeArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+JXSafeArea.m"; sourceTree = "<group>"; };
 		314231772C91889800075644 /* BaseNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationViewController.h; sourceTree = "<group>"; };
@@ -275,10 +269,8 @@
 			isa = PBXGroup;
 			children = (
 				3116C04B2C95A0FB00093CFA /* PYSearch */,
-				3142316A2C91839C00075644 /* ContentBaseViewController.h */,
-				314231692C91839C00075644 /* ContentBaseViewController.m */,
-				3142316F2C91843F00075644 /* FootViewController.h */,
-				314231702C91843F00075644 /* FootViewController.m */,
+				319675632D325C08004AF4BD /* PYCategoryViewController.h */,
+				319675642D325C08004AF4BD /* PYCategoryViewController.m */,
 				31B90CF92D31593300639C3D /* BaseTableViewController.h */,
 				31B90CFA2D31593300639C3D /* BaseTableViewController.m */,
 				31B90CFC2D31624C00639C3D /* BaseListViewController.h */,
@@ -287,8 +279,6 @@
 				31E0AC152C1C67BF008F6564 /* ViewController.m */,
 				3134E46B2C92A92800B9081A /* HotViewController.h */,
 				3134E46C2C92A92800B9081A /* HotViewController.m */,
-				319675632D325C08004AF4BD /* PYCategoryViewController.h */,
-				319675642D325C08004AF4BD /* PYCategoryViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -483,12 +473,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3142316B2C91839C00075644 /* ContentBaseViewController.m in Sources */,
 				31B90CF52D311F4600639C3D /* UserAgreementViewController.m in Sources */,
 				31E0AC162C1C67BF008F6564 /* ViewController.m in Sources */,
 				31E0AC102C1C67BF008F6564 /* AppDelegate.m in Sources */,
 				31B90CFE2D31624C00639C3D /* BaseListViewController.m in Sources */,
-				314231712C91843F00075644 /* FootViewController.m in Sources */,
 				3116C0512C95A0FC00093CFA /* UIView+PYSearchExtension.m in Sources */,
 				314231762C91888A00075644 /* UIWindow+JXSafeArea.m in Sources */,
 				3116C0502C95A0FC00093CFA /* UIColor+PYSearchExtension.m in Sources */,

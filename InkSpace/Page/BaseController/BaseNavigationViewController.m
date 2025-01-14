@@ -20,6 +20,8 @@
     self.interactivePopGestureRecognizer.enabled = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     self.delegate = self;
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self configureNavigationBar];
     
 }
 
@@ -47,6 +49,44 @@
     
     // 控制 tabBar 的显示和隐藏
     viewController.hidesBottomBarWhenPushed = !isRootViewController;
+}
+
+- (void)configureNavigationBar {
+    // 设置导航栏不透明
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    
+    // 设置状态栏样式
+    if (@available(iOS 13.0, *)) {
+        UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+        window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+        
+        UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+        [appearance configureWithOpaqueBackground];
+        appearance.backgroundColor = [UIColor whiteColor];
+        appearance.shadowColor = nil;
+        
+        self.navigationController.navigationBar.standardAppearance = appearance;
+        self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    // 确保导航栏在视图出现时保持白色
+    [self configureNavigationBar];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return NO;
 }
 
 @end

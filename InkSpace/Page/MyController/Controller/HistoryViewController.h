@@ -6,12 +6,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseListViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HistoryViewController : UIViewController
+@interface HistoryViewController : BaseListViewController
 
-@property (assign, nonatomic) NSUInteger category;
+@property (nonatomic, assign) NSUInteger category;
+@property (nonatomic, assign) NSUInteger history_id;
 
 @end
 

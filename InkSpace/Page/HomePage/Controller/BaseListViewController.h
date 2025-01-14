@@ -24,4 +24,7 @@
 - (void)configureCell:(HomeViewCell *)cell withModel:(HomeModel *)model;
 - (CGFloat)calculateCellHeight:(HomeModel *)model;
 
+// 图片下载相关方法
+- (void)downloadImage:(NSString *)imageUrl;
+
 @end

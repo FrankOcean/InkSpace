@@ -36,9 +36,9 @@
     
 
 #if DEBUG
-    self.delButton.hidden = YES;
-#else
     self.delButton.hidden = NO;
+#else
+    self.delButton.hidden = YES;
 #endif
     
 }

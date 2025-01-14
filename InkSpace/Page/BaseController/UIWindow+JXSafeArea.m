@@ -1,48 +1,77 @@
 //
 //  UIWindow+JXSafeArea.m
-//  JXCategoryView
+//  InkSpace
 //
 //  Created by jiaxin on 2018/9/29.
-//  Copyright © 2018 jiaxin. All rights reserved.
+//  Copyright 2018 jiaxin. All rights reserved.
 //
 
 #import "UIWindow+JXSafeArea.h"
 
 @implementation UIWindow (JXSafeArea)
 
-- (UIWindow *)getCurrentWindow {
++ (UIWindow *)mainWindow {
     UIWindow *window = nil;
     if (@available(iOS 13.0, *)) {
-        // 从正在连接活跃的 `UIWindowScene` 中获取 `UIWindow`
-        for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        for (UIWindowScene *scene in UIApplication.sharedApplication.connectedScenes) {
             if (scene.activationState == UISceneActivationStateForegroundActive) {
                 window = scene.windows.firstObject;
                 break;
             }
         }
-    } else {
-        // 对于 iOS 13 以下，仍可以安全地使用 `keyWindow`
-        window = [UIApplication sharedApplication].keyWindow;
     }
+    
+    if (!window) {
+        window = UIApplication.sharedApplication.delegate.window;
+    }
+    
+    if (!window) {
+        window = UIApplication.sharedApplication.windows.firstObject;
+    }
+    
     return window;
 }
 
-- (UIEdgeInsets)jx_layoutInsets {
+- (UIEdgeInsets)safeAreaInsets {
     if (@available(iOS 11.0, *)) {
-        UIEdgeInsets safeAreaInsets = self.safeAreaInsets;
-        if (safeAreaInsets.bottom > 0) {
-            //参考文章：https://mp.weixin.qq.com/s/Ik2zBox3_w0jwfVuQUJAUw
-            return safeAreaInsets;
-        }
-        return UIEdgeInsetsMake(20, 0, 0, 0);
+        return [super safeAreaInsets];
     }
     return UIEdgeInsetsMake(20, 0, 0, 0);
 }
 
-- (CGFloat)jx_navigationHeight {
-    CGFloat statusBarHeight = [self jx_layoutInsets].top;
-    return statusBarHeight + 44;
+- (CGFloat)statusBarHeight {
+    if (@available(iOS 13.0, *)) {
+        return self.windowScene.statusBarManager.statusBarFrame.size.height;
+    }
+    return UIApplication.sharedApplication.statusBarFrame.size.height;
 }
 
+- (CGFloat)navigationBarHeight {
+    return self.statusBarHeight + 44.0;
+}
+
+- (CGFloat)bottomSafeAreaHeight {
+    return self.safeAreaInsets.bottom;
+}
+
+- (CGFloat)tabBarHeight {
+    return 49.0 + self.bottomSafeAreaHeight;
+}
 
 @end
+
+/* usage:
+
+// 获取主窗口
+UIWindow *mainWindow = UIWindow.mainWindow;
+
+// 获取安全区域
+UIEdgeInsets safeArea = mainWindow.safeAreaInsets;
+
+// 获取导航栏高度
+CGFloat navHeight = mainWindow.navigationBarHeight;
+
+// 获取底部安全区域高度（刘海屏底部）
+CGFloat bottomSafe = mainWindow.bottomSafeAreaHeight;
+
+*/

@@ -7,7 +7,6 @@
 @property (nonatomic, strong) UIView *indicatorView;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *titleWidths;
 @property (nonatomic, strong, readwrite) UIView *searchView;
-@property (nonatomic, strong, readwrite) UITextField *searchTextField;
 @property (nonatomic, strong, readwrite) UIButton *searchButton;
 @property (nonatomic, assign) CGFloat searchViewHeight;
 @property (nonatomic, assign) CGFloat buttonWidth;
@@ -39,21 +38,14 @@
     self.searchView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.searchView];
     
-    // Setup search text field
-    CGFloat padding = 10;
-    CGFloat searchButtonWidth = 60;
-    CGFloat textFieldWidth = self.frame.size.width - searchButtonWidth - padding * 2;
-    
-    self.searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(padding, 5, textFieldWidth, 30)];
-    self.searchTextField.placeholder = @"搜索";
-    self.searchTextField.borderStyle = UITextBorderStyleRoundedRect;
-    self.searchTextField.returnKeyType = UIReturnKeySearch;
-    [self.searchView addSubview:self.searchTextField];
-    
     // Setup search button
     self.searchButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.searchButton.frame = CGRectMake(CGRectGetMaxX(self.searchTextField.frame) + padding, 5, searchButtonWidth - padding, 30);
+    self.searchButton.frame = CGRectMake(10, 5, self.frame.size.width - 20, 30);
     [self.searchButton setTitle:@"搜索" forState:UIControlStateNormal];
+    [self.searchButton setTitleColor:[UIColor systemGrayColor] forState:UIControlStateNormal];
+    self.searchButton.layer.borderWidth = 1;
+    self.searchButton.layer.borderColor = [UIColor systemGrayColor].CGColor;
+    self.searchButton.layer.cornerRadius = 5;
     [self.searchButton addTarget:self action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.searchView addSubview:self.searchButton];
 }
@@ -113,7 +105,7 @@
 
 - (void)searchButtonClicked {
     if ([self.delegate respondsToSelector:@selector(categoryView:didClickSearchButton:)]) {
-        [self.delegate categoryView:self didClickSearchButton:self.searchTextField.text];
+        [self.delegate categoryView:self didClickSearchButton:@""];
     }
 }
 

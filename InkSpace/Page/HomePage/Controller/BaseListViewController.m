@@ -12,8 +12,19 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "MJRefresh.h"
 #import <Photos/Photos.h>
+#import "StoreManager.h"
 
 @implementation BaseListViewController
+
+- (CGFloat)getStatusBarHeight {
+    if (@available(iOS 13.0, *)) {
+        UIWindowScene *windowScene = UIApplication.sharedApplication.connectedScenes.allObjects.firstObject;
+        if ([windowScene isKindOfClass:[UIWindowScene class]]) {
+            return windowScene.statusBarManager.statusBarFrame.size.height;
+        }
+    }
+    return 20; // 默认状态栏高度
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -21,6 +32,74 @@
     self.currentPage = 0;
     [self configureRefreshControl];
     [self loadInitialData];
+    
+    // 设置导航栏和视图的背景色
+    self.view.backgroundColor = [UIColor whiteColor];
+    // 配置导航栏外观
+    [self configureNavigationBar];
+    
+    // 设置tableView的frame和背景色
+    if (@available(iOS 11.0, *)) {
+        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    
+    // 设置tableView的背景视图来遮挡状态栏和导航栏之间的空隙
+    CGFloat statusBarHeight = [self getStatusBarHeight];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, -statusBarHeight, self.view.bounds.size.width, statusBarHeight)];
+    headerView.backgroundColor = [UIColor whiteColor];
+    [self.tableView addSubview:headerView];
+    
+}
+
+- (void)configureNavigationBar {
+    // 设置导航栏不透明
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    
+    // 设置状态栏样式
+    if (@available(iOS 13.0, *)) {
+        UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+        window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+        
+        UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+        [appearance configureWithOpaqueBackground];
+        appearance.backgroundColor = [UIColor whiteColor];
+        appearance.shadowColor = nil;
+        
+        self.navigationController.navigationBar.standardAppearance = appearance;
+        self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    }
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    // 确保导航栏在视图出现时保持白色
+    [self configureNavigationBar];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    // 调整tableView的frame以覆盖状态栏和导航栏之间的空隙
+    CGFloat statusBarHeight = [self getStatusBarHeight];
+    CGRect frame = self.view.bounds;
+    frame.origin.y = -statusBarHeight;
+    frame.size.height += statusBarHeight;
+    self.tableView.frame = frame;
 }
 
 - (void)loadInitialData {
@@ -41,8 +120,8 @@
 }
 
 - (void)configureRefreshControl {
-    self.tableView.mj_header.automaticallyChangeAlpha = YES;
-    self.tableView.mj_footer.automaticallyChangeAlpha = YES;
+    self.tableView.mj_header.automaticallyChangeAlpha = NO;
+    self.tableView.mj_footer.automaticallyChangeAlpha = NO;
     
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self loadInitialData];
@@ -113,22 +192,30 @@
 
 #pragma mark - HomeViewCellDelegate
 
+- (void)homeViewCellDidTapDownDeleteButton:(HomeViewCell *)cell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    HomeModel *model = self.items[indexPath.row];
+    [[URLFetcher sharedInstance] fetchDeleteURLsWithID:model.ID];
+    [self.items removeObject:model];
+    [self.tableView reloadData];
+}
+
+- (void)homeViewCellDidTapDownLikeButton:(HomeViewCell *)cell {
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    HomeModel *model = self.items[indexPath.row];
+    model.favorite += 1;
+    [[URLFetcher sharedInstance] fetchLikeCount:model.favorite andID:model.ID];
+    [self.items replaceObjectAtIndex:indexPath.row withObject:model];
+    [cell.likeButton setTitle:[NSString stringWithFormat:@"喜欢%u", model.favorite] forState:UIControlStateNormal];
+    [self.tableView reloadData];
+    [[StoreManager sharedManager] addModel:model];
+}
+
 - (void)homeViewCellDidTapDownloadButton:(HomeViewCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     HomeModel *model = self.items[indexPath.row];
     NSString *picString = [NSString stringWithFormat:@"%s%@", base_pic, model.url];
-    
-    // 检查相册权限
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusNotDetermined) {
-        [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-            if (status == PHAuthorizationStatusAuthorized) {
-                [self downloadImage:picString];
-            }
-        }];
-    } else if (status == PHAuthorizationStatusAuthorized) {
-        [self downloadImage:picString];
-    }
+    [self downloadImage:picString];
 }
 
 - (void)downloadImage:(NSString *)imageUrl {
@@ -136,22 +223,93 @@
     [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url
                                                         options:SDWebImageDownloaderHighPriority
                                                        progress:nil
-                                                      completed:^(UIImage * _Nullable image,
-                                                                NSData * _Nullable data,
-                                                                NSError * _Nullable error,
-                                                                BOOL finished) {
+                                                      completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
         if (image && finished) {
-            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                [PHAssetChangeRequest creationRequestForAssetFromImage:image];
-            } completionHandler:^(BOOL success, NSError * _Nullable error) {
-                if (success) {
+            // 请求相册权限
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                if (status == PHAuthorizationStatusAuthorized) {
+                    // 保存图片到相册
+                    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+                } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        // 可以添加下载成功的提示
+                        [self showToast:@"没有权限访问相册"];
                     });
                 }
             }];
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showToast:@"下载失败，请重试"];
+            });
         }
     }];
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showToast:@"保存失败，请重试"];
+        });
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showToast:@"已保存到相册"];
+        });
+    }
+}
+
+- (void)showToast:(NSString *)message {
+    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+    
+    // 创建一个带有圆角的视图
+    UIView *toastView = [[UIView alloc] init];
+    toastView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
+    toastView.layer.cornerRadius = 10;
+    toastView.clipsToBounds = YES;
+    [window addSubview:toastView];
+    
+    // 添加消息标签
+    UILabel *label = [[UILabel alloc] init];
+    label.text = message;
+    label.textColor = [UIColor whiteColor];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont systemFontOfSize:14];
+    label.numberOfLines = 0;
+    [toastView addSubview:label];
+    
+    // 设置约束
+    toastView.translatesAutoresizingMaskIntoConstraints = NO;
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    // 计算文本大小
+    CGSize maxSize = CGSizeMake(window.bounds.size.width - 80, CGFLOAT_MAX);
+    CGSize labelSize = [message boundingRectWithSize:maxSize
+                                           options:NSStringDrawingUsesLineFragmentOrigin
+                                        attributes:@{NSFontAttributeName: label.font}
+                                           context:nil].size;
+    
+    // 设置toastView的约束
+    [NSLayoutConstraint activateConstraints:@[
+        [toastView.centerXAnchor constraintEqualToAnchor:window.centerXAnchor],
+        [toastView.bottomAnchor constraintEqualToAnchor:window.bottomAnchor constant:-100],
+        [toastView.widthAnchor constraintEqualToConstant:labelSize.width + 40],
+        [toastView.heightAnchor constraintEqualToConstant:labelSize.height + 20]
+    ]];
+    
+    // 设置label的约束
+    [NSLayoutConstraint activateConstraints:@[
+        [label.centerXAnchor constraintEqualToAnchor:toastView.centerXAnchor],
+        [label.centerYAnchor constraintEqualToAnchor:toastView.centerYAnchor],
+        [label.leadingAnchor constraintEqualToAnchor:toastView.leadingAnchor constant:20],
+        [label.trailingAnchor constraintEqualToAnchor:toastView.trailingAnchor constant:-20]
+    ]];
+    
+    // 2秒后移除toast
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            toastView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [toastView removeFromSuperview];
+        }];
+    });
 }
 
 #pragma mark - To be implemented by subclasses

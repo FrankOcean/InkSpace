@@ -53,19 +53,27 @@
 }
 
 #pragma mark - UIScrollViewDelegate
-
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-//    [super scrollViewDidScroll:scrollView];
-//    
-//    UITableView *tableView = (UITableView *)scrollView;
-//    NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
-//    for (NSIndexPath *indexPath in visibleIndexPaths) {
-//        HomeModel *model = self.items[indexPath.row];
-//        if(model.ID >= self.history_id) {
-//            [HomeModel setHistoricID:model.ID forCategory:self.category];
-//        }
-//    }
-//}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (![scrollView isKindOfClass:[UITableView class]]) {
+        return;
+    }
+    
+    UITableView *tableView = (UITableView *)scrollView;
+    NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
+    if (!visibleIndexPaths.count || !self.items.count) {
+        return;
+    }
+    
+    for (NSIndexPath *indexPath in visibleIndexPaths) {
+        if (indexPath.row >= self.items.count) {
+            continue;
+        }
+        HomeModel *model = self.items[indexPath.row];
+        if(model.ID >= self.history_id) {
+            [HomeModel setHistoricID:model.ID forCategory:self.category];
+        }
+    }
+}
 
 @end
 

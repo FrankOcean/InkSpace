@@ -2,8 +2,10 @@
 #import "PYCategoryView.h"
 #import "ViewController.h"
 #import "HotViewController.h"
+#import "BaseNavigationViewController.h"
+#import "PYSearch.h"
 
-@interface PYCategoryViewController () <PYCategoryViewDelegate, UIScrollViewDelegate>
+@interface PYCategoryViewController () <PYCategoryViewDelegate, UIScrollViewDelegate, PYSearchViewControllerDelegate>
 
 @property (nonatomic, strong) PYCategoryView *categoryView;
 @property (nonatomic, strong) UIScrollView *contentScrollView;
@@ -87,14 +89,64 @@
 
 - (void)categoryView:(UIView *)categoryView didClickSearchButton:(NSString *)searchText {
     // Handle search button click
-    NSLog(@"Search text: %@", searchText);
-    // Implement your search logic here
+    NSArray *hotSeaches = @[@"美女", @"动漫", @"人物", @"写真", @"艺术"];
+    PYSearchViewController *searchViewController = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
+        [searchViewController.navigationController pushViewController:[[UIViewController alloc] init] animated:YES];
+    }];
+    searchViewController.hotSearchStyle = PYHotSearchStyleBorderTag;
+    searchViewController.searchHistoryStyle = PYSearchHistoryStyleDefault;
+    searchViewController.searchHistoriesCount = 10;
+    searchViewController.searchSuggestionHidden = YES;
+    searchViewController.searchViewControllerShowMode = PYSearchViewControllerShowDefault;
+    searchViewController.searchResultShowMode = PYSearchResultShowModePush;
+    searchViewController.delegate = self;
+    BaseNavigationViewController *nav = [[BaseNavigationViewController alloc] initWithRootViewController:searchViewController];
+    [self presentViewController:nav animated:YES completion:nil];
+    
+}
+
+#pragma mark - PYSearchViewControllerDelegate
+- (void)searchViewController:(PYSearchViewController *)searchViewController didSearchWithSearchBar:(UISearchBar *)searchBar searchText:(NSString *)searchText {
+    HotViewController *hot = [[HotViewController alloc] init];
+    hot.contentType = ContentTypeSearch;
+    hot.content = searchText;
+    searchViewController.searchResultController = hot;
 }
 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self.categoryView updateIndicatorWithScrollView:scrollView];
+    if (scrollView == self.contentScrollView) {
+        [self.categoryView updateIndicatorWithScrollView:scrollView];
+        
+        // 禁止垂直滚动
+        if (scrollView.contentOffset.y != 0) {
+            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0);
+        }
+    }
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    
+    // 确保contentScrollView不会垂直滚动
+    self.contentScrollView.alwaysBounceVertical = NO;
+    
+    // 遍历所有子控制器，设置其scrollView的contentInset
+    for (UIViewController *vc in self.viewControllers) {
+        if ([vc.view isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = (UIScrollView *)vc.view;
+            scrollView.contentInset = UIEdgeInsetsZero;
+        } else {
+            // 查找子视图中的scrollView
+            for (UIView *subview in vc.view.subviews) {
+                if ([subview isKindOfClass:[UIScrollView class]]) {
+                    UIScrollView *scrollView = (UIScrollView *)subview;
+                    scrollView.contentInset = UIEdgeInsetsZero;
+                }
+            }
+        }
+    }
 }
 
 @end
