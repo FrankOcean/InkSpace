@@ -36,23 +36,6 @@
     }
 }
 
-#pragma mark - HomeViewCellDelegate
-
-- (void)homeViewCell:(HomeViewCell *)cell didClickDownloadButton:(UIButton *)button {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    HomeModel *model = self.items[indexPath.row];
-    NSString *picString = [NSString stringWithFormat:@"%s%@", base_pic, model.url];
-    [self downloadImage:picString];
-}
-
-- (void)homeViewCell:(HomeViewCell *)cell didClickDeleteButton:(UIButton *)button {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    HomeModel *model = self.items[indexPath.row];
-    [[StoreManager sharedManager] removeModelWithID:model.ID];
-    [self.items removeObject:model];
-    [self.tableView reloadData];
-}
-
 - (void)configureCell:(HomeViewCell *)cell withModel:(HomeModel *)model {
     [super configureCell:cell withModel:model];
     cell.likeButton.hidden = YES;  // 在收藏页面隐藏喜欢按钮

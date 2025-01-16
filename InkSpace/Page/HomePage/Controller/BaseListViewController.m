@@ -7,7 +7,7 @@
 
 #import "BaseListViewController.h"
 #import "DetailViewController.h"
-#import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/SDWebImage.h>
 #import <SDWebImage/SDWebImageDownloader.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "MJRefresh.h"
@@ -44,12 +44,6 @@
     } else {
         self.automaticallyAdjustsScrollViewInsets = NO;
     }
-    
-    // 设置tableView的背景视图来遮挡状态栏和导航栏之间的空隙
-    CGFloat statusBarHeight = [self getStatusBarHeight];
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, -statusBarHeight, self.view.bounds.size.width, statusBarHeight)];
-    headerView.backgroundColor = [UIColor whiteColor];
-    [self.tableView addSubview:headerView];
     
 }
 
@@ -91,15 +85,20 @@
     return NO;
 }
 
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
+- (void)configureRefreshControl {
+    // 配置下拉刷新
+    MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self loadInitialData];
+    }];
+    header.automaticallyChangeAlpha = YES;
+    self.tableView.mj_header = header;
     
-    // 调整tableView的frame以覆盖状态栏和导航栏之间的空隙
-    CGFloat statusBarHeight = [self getStatusBarHeight];
-    CGRect frame = self.view.bounds;
-    frame.origin.y = -statusBarHeight;
-    frame.size.height += statusBarHeight;
-    self.tableView.frame = frame;
+    // 配置上拉加载更多
+    MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        [self loadMoreData];
+    }];
+    footer.automaticallyChangeAlpha = YES;
+    self.tableView.mj_footer = footer;
 }
 
 - (void)loadInitialData {
@@ -107,6 +106,13 @@
         self.items = [NSMutableArray arrayWithArray:fetchedArray];
         [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
+        
+        // 如果没有数据，显示无数据的footer
+        if (fetchedArray.count == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        } else {
+            [self.tableView.mj_footer resetNoMoreData];
+        }
     }];
 }
 
@@ -115,20 +121,11 @@
         [self.items addObjectsFromArray:fetchedArray];
         [self.tableView reloadData];
         [self.tableView.mj_footer endRefreshing];
-        [self handleLoadMoreEnd:fetchedArray];
-    }];
-}
-
-- (void)configureRefreshControl {
-    self.tableView.mj_header.automaticallyChangeAlpha = NO;
-    self.tableView.mj_footer.automaticallyChangeAlpha = NO;
-    
-    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self loadInitialData];
-    }];
-    
-    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        [self loadMoreData];
+        
+        // 如果没有更多数据，显示无数据的footer
+        if (fetchedArray.count == 0) {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }
     }];
 }
 
@@ -195,9 +192,12 @@
 - (void)homeViewCellDidTapDownDeleteButton:(HomeViewCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     HomeModel *model = self.items[indexPath.row];
-    [[URLFetcher sharedInstance] fetchDeleteURLsWithID:model.ID];
+//#if DEBUG
+//    [[URLFetcher sharedInstance] fetchDeleteURLsWithID:model.ID];
+//#endif
     [self.items removeObject:model];
     [self.tableView reloadData];
+    [[StoreManager sharedManager] removeModelWithID:model.ID];
 }
 
 - (void)homeViewCellDidTapDownLikeButton:(HomeViewCell *)cell {
@@ -219,28 +219,82 @@
 }
 
 - (void)downloadImage:(NSString *)imageUrl {
+    // 创建进度条视图
+    UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
+    UIView *progressBgView = [[UIView alloc] init];
+    progressBgView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+    progressBgView.layer.cornerRadius = 10;
+    [window addSubview:progressBgView];
+    
+    UILabel *progressLabel = [[UILabel alloc] init];
+    progressLabel.textColor = [UIColor whiteColor];
+    progressLabel.font = [UIFont systemFontOfSize:14];
+    progressLabel.textAlignment = NSTextAlignmentCenter;
+    progressLabel.text = @"下载中...0%";
+    [progressBgView addSubview:progressLabel];
+    
+    UIProgressView *progressView = [[UIProgressView alloc] init];
+    progressView.progressTintColor = [UIColor whiteColor];
+    progressView.trackTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3];
+    [progressBgView addSubview:progressView];
+    
+    // 设置约束
+    progressBgView.translatesAutoresizingMaskIntoConstraints = NO;
+    progressLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    progressView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [progressBgView.centerXAnchor constraintEqualToAnchor:window.centerXAnchor],
+        [progressBgView.centerYAnchor constraintEqualToAnchor:window.centerYAnchor],
+        [progressBgView.widthAnchor constraintEqualToConstant:200],
+        [progressBgView.heightAnchor constraintEqualToConstant:80],
+        
+        [progressLabel.topAnchor constraintEqualToAnchor:progressBgView.topAnchor constant:15],
+        [progressLabel.centerXAnchor constraintEqualToAnchor:progressBgView.centerXAnchor],
+        
+        [progressView.leftAnchor constraintEqualToAnchor:progressBgView.leftAnchor constant:20],
+        [progressView.rightAnchor constraintEqualToAnchor:progressBgView.rightAnchor constant:-20],
+        [progressView.topAnchor constraintEqualToAnchor:progressLabel.bottomAnchor constant:15],
+        [progressView.heightAnchor constraintEqualToConstant:2]
+    ]];
+    
+    // 开始下载
     NSURL *url = [NSURL URLWithString:imageUrl];
     [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:url
                                                         options:SDWebImageDownloaderHighPriority
-                                                       progress:nil
+                                                       progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        // 更新进度
+        float progress = (float)receivedSize / expectedSize;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            progressView.progress = progress;
+            progressLabel.text = [NSString stringWithFormat:@"下载中...%d%%", (int)(progress * 100)];
+        });
+    }
                                                       completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-        if (image && finished) {
-            // 请求相册权限
-            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                if (status == PHAuthorizationStatusAuthorized) {
-                    // 保存图片到相册
-                    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-                } else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self showToast:@"没有权限访问相册"];
-                    });
-                }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 移除进度条
+            [UIView animateWithDuration:0.3 animations:^{
+                progressBgView.alpha = 0;
+            } completion:^(BOOL finished) {
+                [progressBgView removeFromSuperview];
             }];
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (image && finished) {
+                // 请求相册权限
+                [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                    if (status == PHAuthorizationStatusAuthorized) {
+                        // 保存图片到相册
+                        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self showToast:@"没有权限访问相册"];
+                        });
+                    }
+                }];
+            } else {
                 [self showToast:@"下载失败，请重试"];
-            });
-        }
+            }
+        });
     }];
 }
 

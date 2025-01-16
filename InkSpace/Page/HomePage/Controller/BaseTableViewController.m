@@ -70,6 +70,8 @@
         _tableView.translatesAutoresizingMaskIntoConstraints = NO;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.estimatedRowHeight = 200;
+        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
+        _tableView.scrollIndicatorInsets = _tableView.contentInset;
         if (@available(iOS 15.0, *)) {
             _tableView.prefetchingEnabled = NO;
         }

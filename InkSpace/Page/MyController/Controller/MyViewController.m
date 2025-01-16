@@ -91,7 +91,9 @@
         // 评价操作
         [self handleReview];
     } else if ([selectedItem isEqualToString:@"调试"]) {
+#if DEBUG
         [[FLEXManager sharedManager] showExplorer];
+#endif
     }
 }
 

@@ -44,31 +44,27 @@
     }];
 }
 
-#pragma mark - HomeViewCellDelegate
-
-- (void)homeViewCell:(HomeViewCell *)cell didClickDownloadButton:(UIButton *)button {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    HomeModel *model = self.items[indexPath.row];
-    NSString *picString = [NSString stringWithFormat:@"%s%@", base_pic, model.url];
-    [super downloadImage:picString];
-}
-
-- (void)homeViewCell:(HomeViewCell *)cell didClickDeleteButton:(UIButton *)button {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    HomeModel *model = self.items[indexPath.row];
-    [[URLFetcher sharedInstance] fetchDeleteURLsWithID:model.ID];
-    [self.items removeObject:model];
-    [self.tableView reloadData];
-}
-
-- (void)homeViewCell:(HomeViewCell *)cell didClickLikeButton:(UIButton *)button {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    HomeModel *model = self.items[indexPath.row];
-    model.favorite += 1;
-    [[URLFetcher sharedInstance] fetchLikeCount:model.favorite andID:model.ID];
-    [[StoreManager sharedManager] addModel:model];
-    [self.items replaceObjectAtIndex:indexPath.row withObject:model];
-    [self.tableView reloadData];
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (![scrollView isKindOfClass:[UITableView class]]) {
+        return;
+    }
+    
+    UITableView *tableView = (UITableView *)scrollView;
+    NSArray *visibleIndexPaths = [tableView indexPathsForVisibleRows];
+    if (!visibleIndexPaths.count || !self.items.count) {
+        return;
+    }
+    
+    for (NSIndexPath *indexPath in visibleIndexPaths) {
+        if (indexPath.row >= self.items.count) {
+            continue;
+        }
+        HomeModel *model = self.items[indexPath.row];
+        if(model.ID >= self.history_id) {
+            [HomeModel setHistoricID:model.ID forCategory:self.category];
+        }
+    }
 }
 
 @end
