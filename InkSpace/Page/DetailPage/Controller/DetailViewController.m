@@ -140,7 +140,7 @@
     [self.bottomView addSubview:self.imageInfoLabel];
     
     // 设置图片信息
-    NSString *dimensions = [NSString stringWithFormat:@"%dx%d", (int)self.image.size.width, (int)self.image.size.height];
+    NSString *dimensions = [NSString stringWithFormat:@"%dx%d", (int)self.image.size.width*2, (int)self.image.size.height*2];
     float sizeInMB = self.image.size.width * self.image.size.height * 4 / (1024.0 * 1024.0); // 粗略估算
     self.imageInfoLabel.text = [NSString stringWithFormat:@"尺寸: %@\n大小: %.1f MB", dimensions, sizeInMB];
     

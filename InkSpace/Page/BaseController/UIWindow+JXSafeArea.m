@@ -14,7 +14,7 @@
     UIWindow *window = nil;
     if (@available(iOS 13.0, *)) {
         for (UIWindowScene *scene in UIApplication.sharedApplication.connectedScenes) {
-            if (scene.activationState == UISceneActivationStateForegroundActive) {
+            if (scene.activationState == UISceneActivationStateForegroundActive | scene.activationState == UISceneActivationStateForegroundInactive) {
                 window = scene.windows.firstObject;
                 break;
             }
@@ -25,25 +25,15 @@
         window = UIApplication.sharedApplication.delegate.window;
     }
     
-    if (!window) {
-        window = UIApplication.sharedApplication.windows.firstObject;
-    }
-    
     return window;
 }
 
 - (UIEdgeInsets)safeAreaInsets {
-    if (@available(iOS 11.0, *)) {
-        return [super safeAreaInsets];
-    }
-    return UIEdgeInsetsMake(20, 0, 0, 0);
+    return [super safeAreaInsets];
 }
 
 - (CGFloat)statusBarHeight {
-    if (@available(iOS 13.0, *)) {
-        return self.windowScene.statusBarManager.statusBarFrame.size.height;
-    }
-    return UIApplication.sharedApplication.statusBarFrame.size.height;
+    return self.windowScene.statusBarManager.statusBarFrame.size.height;
 }
 
 - (CGFloat)navigationBarHeight {

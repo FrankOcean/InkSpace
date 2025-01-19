@@ -13,7 +13,7 @@
         <scene sceneID="RC0-7p-mus">
             <objects>
                 <tabBarController id="iwH-lJ-hki" sceneMemberID="viewController">
-                    <tabBar key="tabBar" alpha="0.94999999999999996" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="zH2-2t-cFy">
+                    <tabBar key="tabBar" autoresizesSubviews="NO" alpha="0.94999999999999996" contentMode="scaleToFill" id="zH2-2t-cFy">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" systemColor="tertiarySystemBackgroundColor"/>

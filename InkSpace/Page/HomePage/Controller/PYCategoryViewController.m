@@ -46,11 +46,20 @@
 - (void)setupUI {
     // Setup category view
     CGFloat topInset = 0;
-    if (@available(iOS 13.0, *)) {
-        UIWindow *window = UIApplication.sharedApplication.windows.firstObject;
-        topInset = window.safeAreaInsets.top;
-    } else {
-        topInset = [[UIApplication sharedApplication] statusBarFrame].size.height;
+
+    // 获取当前活跃的 UIWindowScene
+    NSArray<UIScene *> *connectedScenes = UIApplication.sharedApplication.connectedScenes.allObjects;
+    for (UIScene *scene in connectedScenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            if (windowScene.activationState == UISceneActivationStateForegroundActive | windowScene.activationState == UISceneActivationStateForegroundInactive) {
+                // 使用 UIStatusBarManager 获取状态栏高度
+                UIStatusBarManager *statusBarManager = windowScene.statusBarManager;
+                topInset = statusBarManager.statusBarFrame.size.height;
+                NSLog(@"====%f", topInset);
+                break;
+            }
+        }
     }
     
     CGFloat categoryViewHeight = 84;

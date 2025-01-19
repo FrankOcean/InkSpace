@@ -26,9 +26,9 @@
                  blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
                 alpha:1.0]
 
-#define base_url "https://www.supertrend.top/"
-#define base_pic "https://www.supertrend.top/pictures/"
-#define base_wallpapers "https://www.supertrend.top/wallpapers/"
+#define base_url "https://www.beliefboom.com/"
+#define base_pic "https://www.beliefboom.com/pictures/"
+#define base_wallpapers "https://www.beliefboom.com/wallpapers/"
 
 // #define img_random "https://www.supertrend.top/wallpapers/cursor/0?cursor="
 

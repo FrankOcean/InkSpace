@@ -44,16 +44,16 @@
         }
     }
     
-    if (window.safeAreaInsets.top > 50) {
-        self.topOffset = window.safeAreaInsets.top;
-    }
+//    if (window.safeAreaInsets.top > 50) {
+//        self.topOffset = window.safeAreaInsets.top;
+//    }
     
     if (window.safeAreaInsets.bottom > 0) {
         tabBarHeight = 83.0;
     }
     
     NSArray *constraints = @[
-        [self.tableView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:self.topOffset],
+        [self.tableView.topAnchor constraintEqualToAnchor:self.view.topAnchor],// constant:self.topOffset],
         [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
         [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
         [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor constant:-tabBarHeight + window.safeAreaInsets.bottom]

@@ -16,16 +16,6 @@
 
 @implementation BaseListViewController
 
-- (CGFloat)getStatusBarHeight {
-    if (@available(iOS 13.0, *)) {
-        UIWindowScene *windowScene = UIApplication.sharedApplication.connectedScenes.allObjects.firstObject;
-        if ([windowScene isKindOfClass:[UIWindowScene class]]) {
-            return windowScene.statusBarManager.statusBarFrame.size.height;
-        }
-    }
-    return 20; // 默认状态栏高度
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.items = [NSMutableArray array];
