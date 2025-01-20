@@ -14,6 +14,7 @@
 
 @property (nonatomic, strong) NSMutableArray <HomeModel *> *items;
 @property (nonatomic, assign) NSUInteger currentPage;
+@property (nonatomic, assign) BOOL isStore;
 
 // 子类需要重写的方法来实现具体的数据获取逻辑
 - (void)fetchInitialData:(void(^)(NSArray *fetchedArray))completion;

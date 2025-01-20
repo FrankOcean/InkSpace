@@ -32,7 +32,7 @@
 #pragma mark - BaseListViewController
 
 - (void)fetchInitialData:(void(^)(NSArray *fetchedArray))completion {
-    self.currentPage = 0;
+    self.currentPage = 1;
     [[URLFetcher sharedInstance] fetchURLsWithCategory:self.category andCompletion:^(NSArray * _Nonnull fetchedArray) {
         HomeModel *model = [fetchedArray lastObject];
         self.currentPage = model.ID;

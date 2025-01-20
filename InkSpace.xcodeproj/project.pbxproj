@@ -367,6 +367,7 @@
 				31E0AC082C1C67BF008F6564 /* Frameworks */,
 				31E0AC092C1C67BF008F6564 /* Resources */,
 				5D02557B71B1C8928EC6BA6C /* [CP] Embed Pods Frameworks */,
+				82EC5E73CBA01357C8CA1EB4 /* Fix Privacy Manifest */,
 			);
 			buildRules = (
 			);
@@ -442,6 +443,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-InkSpace/Pods-InkSpace-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		82EC5E73CBA01357C8CA1EB4 /* Fix Privacy Manifest */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Fix Privacy Manifest";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "${PROJECT_DIR}/app_privacy_manifest_fixer/fixer.sh ";
 			showEnvVarsInLog = 0;
 		};
 		EBE7C1490329F58EA9C5C6E4 /* [CP] Check Pods Manifest.lock */ = {
@@ -677,7 +698,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -722,7 +743,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

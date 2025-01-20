@@ -26,7 +26,7 @@
 #pragma mark - BaseListViewController
 
 - (void)fetchInitialData:(void(^)(NSArray *fetchedArray))completion {
-    self.currentPage = 0;
+    self.currentPage = 1;
     if (self.contentType == ContentTypeNewest) {
         [[URLFetcher sharedInstance] fetchNewURLsWithPage:self.currentPage andCompletion:completion];
     } else if (self.contentType == ContentTypeHottest) {

@@ -20,6 +20,7 @@ xcuserdata/
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 #
 Pods/
+app_privacy_manifest_fixer/
 #
 # Add this line if you want to avoid checking in source code from the Xcode workspace
 *.xcworkspace

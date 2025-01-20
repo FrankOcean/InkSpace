@@ -182,9 +182,11 @@
 - (void)homeViewCellDidTapDownDeleteButton:(HomeViewCell *)cell {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     HomeModel *model = self.items[indexPath.row];
-//#if DEBUG
-//    [[URLFetcher sharedInstance] fetchDeleteURLsWithID:model.ID];
-//#endif
+#if DEBUG
+    if (!self.isStore) {
+        [[URLFetcher sharedInstance] fetchDeleteURLsWithID:model.ID];
+    }
+#endif
     [self.items removeObject:model];
     [self.tableView reloadData];
     [[StoreManager sharedManager] removeModelWithID:model.ID];
