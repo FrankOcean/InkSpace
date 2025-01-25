@@ -6,7 +6,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)categoryView:(UIView *)categoryView didSelectItemAtIndex:(NSInteger)index;
 - (void)categoryView:(UIView *)categoryView didClickSearchButton:(NSString *)searchText;
-
+- (void)categoryView:(UIView *)categoryView didClickProfileButton:(NSString *)text;
 @end
 
 @interface PYCategoryView : UIView

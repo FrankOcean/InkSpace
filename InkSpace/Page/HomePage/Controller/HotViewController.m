@@ -18,11 +18,6 @@
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = NO;
-}
-
 #pragma mark - BaseListViewController
 
 - (void)fetchInitialData:(void(^)(NSArray *fetchedArray))completion {

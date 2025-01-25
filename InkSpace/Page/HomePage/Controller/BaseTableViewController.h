@@ -23,5 +23,6 @@
 - (void)setupTableView;
 - (void)standardHeader;
 - (void)loadData;
+- (void)hideLoading;
 
 @end

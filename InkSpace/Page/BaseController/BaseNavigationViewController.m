@@ -20,7 +20,6 @@
     self.interactivePopGestureRecognizer.enabled = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     self.delegate = self;
-    self.view.backgroundColor = [UIColor whiteColor];
     [self configureNavigationBar];
     
 }

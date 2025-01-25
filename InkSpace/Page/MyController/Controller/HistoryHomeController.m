@@ -18,20 +18,6 @@
 
 @implementation HistoryHomeController
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if (self.navigationController.viewControllers.count == 1) {
-        self.tabBarController.tabBar.hidden = NO;
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    if (self.navigationController.viewControllers.count > 1) {
-        self.tabBarController.tabBar.hidden = YES;
-    }
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"历史记录";

@@ -24,14 +24,18 @@
 
 @implementation MyViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    self.tabBarController.tabBar.hidden = NO;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];  
     self.title = @"设置";
+    
+    // 添加关闭按钮
+    UIImage *closeImage = [[UIImage systemImageNamed:@"multiply"] imageWithTintColor:[UIColor blackColor]];
+    UIBarButtonItem *closeButton = [[UIBarButtonItem alloc] initWithImage:closeImage
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(closeButtonTapped)];
+    closeButton.tintColor = [UIColor blackColor];
+    self.navigationItem.leftBarButtonItem = closeButton;
     
     self.items = @[@"收藏", @"清除缓存", @"历史记录", @"用户协议", @"反馈"];
 #if DEBUG
@@ -44,6 +48,11 @@
     
     [self.view addSubview:self.tableView];
     
+}
+
+// 添加关闭按钮的动作方法
+- (void)closeButtonTapped {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource

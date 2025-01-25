@@ -27,6 +27,7 @@
     NSArray *arr = [[StoreManager sharedManager] getAllModels];
     if (completion) {
         completion(arr);
+        [self hideLoading];
     }
 }
 

@@ -4,6 +4,7 @@
 #import "HotViewController.h"
 #import "BaseNavigationViewController.h"
 #import "PYSearch.h"
+#import "MyViewController.h"
 
 @interface PYCategoryViewController () <PYCategoryViewDelegate, UIScrollViewDelegate, PYSearchViewControllerDelegate>
 
@@ -112,6 +113,12 @@
     BaseNavigationViewController *nav = [[BaseNavigationViewController alloc] initWithRootViewController:searchViewController];
     [self presentViewController:nav animated:YES completion:nil];
     
+}
+
+- (void)categoryView:(UIView *)categoryView didClickProfileButton:(NSString *)text {
+    MyViewController *myVc = [[MyViewController alloc] init];
+    BaseNavigationViewController *nav = [[BaseNavigationViewController alloc] initWithRootViewController:myVc];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark - PYSearchViewControllerDelegate

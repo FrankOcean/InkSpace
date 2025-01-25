@@ -11,7 +11,7 @@
 @property (nonatomic, assign) CGFloat searchViewHeight;
 @property (nonatomic, assign) CGFloat buttonWidth;
 @property (nonatomic, assign) CGFloat categoryHeight;
-
+@property (nonatomic, strong, readwrite) UIButton *profileButton;  // 新增属性
 @end
 
 @implementation PYCategoryView
@@ -33,14 +33,26 @@
 }
 
 - (void)setupSearchView {
-    // Setup search container view
     self.searchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.searchViewHeight)];
     self.searchView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.searchView];
     
-    // Setup search button
+    // 添加"我的"按钮
+    CGFloat profileButtonWidth = 60;
+    self.profileButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.profileButton.frame = CGRectMake(10, 5, profileButtonWidth, 30);
+    [self.profileButton setTitle:@"我的" forState:UIControlStateNormal];
+    [self.profileButton setTitleColor:[UIColor systemGrayColor] forState:UIControlStateNormal];
+    self.profileButton.layer.borderWidth = 1;
+    self.profileButton.layer.borderColor = [UIColor systemGrayColor].CGColor;
+    self.profileButton.layer.cornerRadius = 5;
+    [self.profileButton addTarget:self action:@selector(profileButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.searchView addSubview:self.profileButton];
+    
+    // 调整搜索按钮位置和宽度
+    CGFloat searchButtonX = CGRectGetMaxX(self.profileButton.frame) + 10;
     self.searchButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    self.searchButton.frame = CGRectMake(10, 5, self.frame.size.width - 20, 30);
+    self.searchButton.frame = CGRectMake(searchButtonX, 5, self.frame.size.width - searchButtonX - 10, 30);
     [self.searchButton setTitle:@"搜索" forState:UIControlStateNormal];
     [self.searchButton setTitleColor:[UIColor systemGrayColor] forState:UIControlStateNormal];
     self.searchButton.layer.borderWidth = 1;
@@ -48,6 +60,13 @@
     self.searchButton.layer.cornerRadius = 5;
     [self.searchButton addTarget:self action:@selector(searchButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.searchView addSubview:self.searchButton];
+}
+
+// 添加"我的"按钮点击事件
+- (void)profileButtonClicked {
+    if ([self.delegate respondsToSelector:@selector(categoryView:didClickProfileButton:)]) {
+        [self.delegate categoryView:self didClickProfileButton:@""];
+    }
 }
 
 - (void)setupUI {
