@@ -30,6 +30,7 @@
         if (self.content.length == 0) { self.content = @""; }
         [[URLFetcher sharedInstance] fetchSearchURLsWithContent:self.content Page:self.currentPage andCompletion:completion];
     }
+    [self hideLoading];
 }
 
 - (void)fetchMoreData:(void(^)(NSArray *fetchedArray))completion {

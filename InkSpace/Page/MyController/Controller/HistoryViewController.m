@@ -29,6 +29,7 @@
         HomeModel *model = [fetchedArray lastObject];
         self.currentPage = model.ID;
         if (completion) {
+            [self hideLoading];
             completion(fetchedArray);
         }
     }];

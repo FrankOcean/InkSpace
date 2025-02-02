@@ -272,34 +272,42 @@
             }];
             
             if (image && finished) {
-                // 请求相册权限
-                [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-                    if (status == PHAuthorizationStatusAuthorized) {
-                        // 保存图片到相册
-                        UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-                    } else {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self showToast:@"没有权限访问相册"];
-                        });
-                    }
-                }];
-            } else {
-                [self showToast:@"下载失败，请重试"];
+                [self saveImageToPhotoLibrary:image];
             }
         });
     }];
 }
 
-- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    if (error) {
+- (void)saveImageToPhotoLibrary:(UIImage *)image {
+    // Ensure we're on the main thread
+    if (!NSThread.isMainThread) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self showToast:@"保存失败，请重试"];
+            [self saveImageToPhotoLibrary:image];
         });
-    } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showToast:@"已保存到相册"];
-        });
+        return;
     }
+    
+    [PHPhotoLibrary requestAuthorizationForAccessLevel:PHAccessLevelAddOnly handler:^(PHAuthorizationStatus status) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (status == PHAuthorizationStatusAuthorized) {
+                // 保存图片到相册
+                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+                    [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+                } completionHandler:^(BOOL success, NSError * _Nullable error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (success) {
+                            [self showToast:@"图片已保存"];
+                        } else {
+                            NSString *errorMessage = error ? error.localizedDescription : @"保存失败";
+                            [self showToast:errorMessage];
+                        }
+                    });
+                }];
+            } else {
+                [self showToast:@"没有权限访问相册"];
+            }
+        });
+    }];
 }
 
 - (void)showToast:(NSString *)message {
@@ -344,8 +352,8 @@
     [NSLayoutConstraint activateConstraints:@[
         [label.centerXAnchor constraintEqualToAnchor:toastView.centerXAnchor],
         [label.centerYAnchor constraintEqualToAnchor:toastView.centerYAnchor],
-        [label.leadingAnchor constraintEqualToAnchor:toastView.leadingAnchor constant:20],
-        [label.trailingAnchor constraintEqualToAnchor:toastView.trailingAnchor constant:-20]
+        [label.leadingAnchor constraintEqualToAnchor:toastView.leadingAnchor constant:5],
+        [label.trailingAnchor constraintEqualToAnchor:toastView.trailingAnchor constant:-5]
     ]];
     
     // 2秒后移除toast
