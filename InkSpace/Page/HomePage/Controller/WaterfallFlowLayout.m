@@ -113,10 +113,6 @@ static const UIEdgeInsets kDefaultInsets = {1, 1, 1, 1};
     CGFloat collectionViewWidth = self.collectionView.frame.size.width;
     CGFloat itemWidth = (collectionViewWidth - self.edgeInsets.left - self.edgeInsets.right - (self.columnCount - 1) * self.columnMargin) / self.columnCount;
     
-    NSLog(@"itemWidth===%f", itemWidth);
-    NSLog(@"SCREEN_WIDTH===%f", SCREEN_WIDTH);
-
-    
     // 通过代理获取item的高度
     CGFloat itemHeight = [self.delegate waterfallLayout:self heightForItemAtIndexPath:indexPath itemWidth:itemWidth];
     
@@ -150,7 +146,6 @@ static const UIEdgeInsets kDefaultInsets = {1, 1, 1, 1};
     if (self.contentHeight < columnHeight) {
         self.contentHeight = columnHeight;
     }
-    NSLog(@"SCREEN_WIDTH===%@", attributes);
     return attributes;
 }
 

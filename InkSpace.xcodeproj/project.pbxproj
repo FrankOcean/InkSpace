@@ -17,7 +17,6 @@
 		3127E0FB2C96F50E00A7A20B /* StoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3127E0FA2C96F50E00A7A20B /* StoreManager.m */; };
 		3127E1002C9701F700A7A20B /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3127E0FF2C9701F700A7A20B /* HistoryViewController.m */; };
 		3127E1062C97030D00A7A20B /* HistoryHomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3127E1052C97030D00A7A20B /* HistoryHomeController.m */; };
-		3134E46D2C92A92800B9081A /* HotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3134E46C2C92A92800B9081A /* HotViewController.m */; };
 		3134E46F2C92DDD600B9081A /* gradient_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 3134E46E2C92DDD600B9081A /* gradient_image.png */; };
 		3134E4752C92E74F00B9081A /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3134E4742C92E74F00B9081A /* MyViewController.m */; };
 		314231762C91888A00075644 /* UIWindow+JXSafeArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 314231752C91888A00075644 /* UIWindow+JXSafeArea.m */; };
@@ -36,7 +35,6 @@
 		31B90CFE2D31624C00639C3D /* BaseListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B90CFD2D31624C00639C3D /* BaseListViewController.m */; };
 		31E0AC102C1C67BF008F6564 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E0AC0F2C1C67BF008F6564 /* AppDelegate.m */; };
 		31E0AC132C1C67BF008F6564 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E0AC122C1C67BF008F6564 /* SceneDelegate.m */; };
-		31E0AC162C1C67BF008F6564 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E0AC152C1C67BF008F6564 /* ViewController.m */; };
 		31E0AC192C1C67BF008F6564 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31E0AC172C1C67BF008F6564 /* Main.storyboard */; };
 		31E0AC1B2C1C67C0008F6564 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31E0AC1A2C1C67C0008F6564 /* Assets.xcassets */; };
 		31E0AC1E2C1C67C0008F6564 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31E0AC1C2C1C67C0008F6564 /* LaunchScreen.storyboard */; };
@@ -75,8 +73,6 @@
 		3127E0FF2C9701F700A7A20B /* HistoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		3127E1042C97030D00A7A20B /* HistoryHomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistoryHomeController.h; sourceTree = "<group>"; };
 		3127E1052C97030D00A7A20B /* HistoryHomeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HistoryHomeController.m; sourceTree = "<group>"; };
-		3134E46B2C92A92800B9081A /* HotViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotViewController.h; sourceTree = "<group>"; };
-		3134E46C2C92A92800B9081A /* HotViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HotViewController.m; sourceTree = "<group>"; };
 		3134E46E2C92DDD600B9081A /* gradient_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_image.png; sourceTree = "<group>"; };
 		3134E4732C92E74F00B9081A /* MyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyViewController.h; sourceTree = "<group>"; };
 		3134E4742C92E74F00B9081A /* MyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
@@ -111,8 +107,6 @@
 		31E0AC0F2C1C67BF008F6564 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		31E0AC112C1C67BF008F6564 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		31E0AC122C1C67BF008F6564 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		31E0AC142C1C67BF008F6564 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		31E0AC152C1C67BF008F6564 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		31E0AC182C1C67BF008F6564 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		31E0AC1A2C1C67C0008F6564 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31E0AC1D2C1C67C0008F6564 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -184,6 +178,7 @@
 			children = (
 				3127E0FD2C96F52B00A7A20B /* Model */,
 				3134E4722C92E70F00B9081A /* Controller */,
+				3199861C2DA5452900A91BB2 /* View */,
 			);
 			path = MyController;
 			sourceTree = "<group>";
@@ -191,6 +186,10 @@
 		3134E4722C92E70F00B9081A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				31B90CF92D31593300639C3D /* BaseTableViewController.h */,
+				31B90CFA2D31593300639C3D /* BaseTableViewController.m */,
+				31B90CFC2D31624C00639C3D /* BaseListViewController.h */,
+				31B90CFD2D31624C00639C3D /* BaseListViewController.m */,
 				31E5FDC12D9D274300EDE3D6 /* HistoryCollectionViewController.h */,
 				31E5FDC22D9D274300EDE3D6 /* HistoryCollectionViewController.m */,
 				3134E4732C92E74F00B9081A /* MyViewController.h */,
@@ -281,9 +280,6 @@
 			children = (
 				31E5FDB22D9D1C1500EDE3D6 /* HomeCollectionViewCell.h */,
 				31E5FDB32D9D1C1500EDE3D6 /* HomeCollectionViewCell.m */,
-				315201252C1DC92E002DC2B1 /* HomeViewCell.h */,
-				315201262C1DC92E002DC2B1 /* HomeViewCell.m */,
-				315201272C1DC92E002DC2B1 /* HomeViewCell.xib */,
 				319675602D325BEC004AF4BD /* PYCategoryView.h */,
 				319675612D325BEC004AF4BD /* PYCategoryView.m */,
 			);
@@ -294,6 +290,8 @@
 			isa = PBXGroup;
 			children = (
 				3116C04B2C95A0FB00093CFA /* PYSearch */,
+				319675632D325C08004AF4BD /* PYCategoryViewController.h */,
+				319675642D325C08004AF4BD /* PYCategoryViewController.m */,
 				31E5FDC42D9D2FB500EDE3D6 /* WaterfallFlowLayout.h */,
 				31E5FDC52D9D2FB500EDE3D6 /* WaterfallFlowLayout.m */,
 				31E5FDB52D9D270C00EDE3D6 /* BaseCollectionListViewController.h */,
@@ -304,16 +302,6 @@
 				31E5FDBA2D9D270C00EDE3D6 /* CollectionViewController.m */,
 				31E5FDBB2D9D270C00EDE3D6 /* HotCollectionViewController.h */,
 				31E5FDBC2D9D270C00EDE3D6 /* HotCollectionViewController.m */,
-				319675632D325C08004AF4BD /* PYCategoryViewController.h */,
-				319675642D325C08004AF4BD /* PYCategoryViewController.m */,
-				31B90CF92D31593300639C3D /* BaseTableViewController.h */,
-				31B90CFA2D31593300639C3D /* BaseTableViewController.m */,
-				31B90CFC2D31624C00639C3D /* BaseListViewController.h */,
-				31B90CFD2D31624C00639C3D /* BaseListViewController.m */,
-				31E0AC142C1C67BF008F6564 /* ViewController.h */,
-				31E0AC152C1C67BF008F6564 /* ViewController.m */,
-				3134E46B2C92A92800B9081A /* HotViewController.h */,
-				3134E46C2C92A92800B9081A /* HotViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -341,6 +329,16 @@
 				3152012E2C1DD7C2002DC2B1 /* PrefixHeader.pch */,
 			);
 			path = Globally;
+			sourceTree = "<group>";
+		};
+		3199861C2DA5452900A91BB2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				315201252C1DC92E002DC2B1 /* HomeViewCell.h */,
+				315201262C1DC92E002DC2B1 /* HomeViewCell.m */,
+				315201272C1DC92E002DC2B1 /* HomeViewCell.xib */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		31E0AC022C1C67BF008F6564 = {
@@ -530,7 +528,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				31B90CF52D311F4600639C3D /* UserAgreementViewController.m in Sources */,
-				31E0AC162C1C67BF008F6564 /* ViewController.m in Sources */,
 				31E0AC102C1C67BF008F6564 /* AppDelegate.m in Sources */,
 				31B90CFE2D31624C00639C3D /* BaseListViewController.m in Sources */,
 				3116C0512C95A0FC00093CFA /* UIView+PYSearchExtension.m in Sources */,
@@ -545,7 +542,6 @@
 				3127E1002C9701F700A7A20B /* HistoryViewController.m in Sources */,
 				319675652D325C08004AF4BD /* PYCategoryViewController.m in Sources */,
 				3116C04D2C95A0FC00093CFA /* PYSearchConst.m in Sources */,
-				3134E46D2C92A92800B9081A /* HotViewController.m in Sources */,
 				319675622D325BEC004AF4BD /* PYCategoryView.m in Sources */,
 				3116C04C2C95A0FC00093CFA /* NSBundle+PYSearchExtension.m in Sources */,
 				3116C04E2C95A0FC00093CFA /* PYSearchSuggestionViewController.m in Sources */,

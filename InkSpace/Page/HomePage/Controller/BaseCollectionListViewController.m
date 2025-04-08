@@ -114,7 +114,34 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     HomeCollectionViewCell *cell = (HomeCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    [DetailViewController showImage:cell.imgView.image fromImageView:cell.imgView completion:nil];
+    NSMutableArray *imageUrls = [NSMutableArray array];
+    for (HomeModel *model in self.items) {
+        if (model.url) {
+            [imageUrls addObject:model.url];
+        }
+    }
+    HomeModel *selectedModel = self.items[indexPath.item];
+    [DetailViewController showImages:imageUrls currentIndex:indexPath.item category:selectedModel.category currentPage:self.currentPage fromImageView:cell.imgView sourceViewController:self completion:nil];
+}
+
+- (void)scrollToItemAtIndex:(NSNumber *)index {
+    NSInteger itemIndex = [index integerValue];
+    if (itemIndex >= 0 && itemIndex < self.items.count) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:itemIndex inSection:0];
+        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+    }
+}
+
+#pragma mark - Public Methods
+
+- (void)updateItems:(NSArray *)newItems {
+    if (!newItems) return;
+    
+    // 更新数据源
+    [self.items addObjectsFromArray:newItems];
+    
+    // 刷新集合视图
+    [self.collectionView reloadData];
 }
 
 #pragma mark - Helper Methods

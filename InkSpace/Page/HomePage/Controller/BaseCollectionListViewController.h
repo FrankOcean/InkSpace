@@ -27,4 +27,10 @@
 // 图片下载相关方法
 - (void)downloadImage:(NSString *)imageUrl;
 
+// 滚动相关方法
+- (void)scrollToItemAtIndex:(NSNumber *)index;
+
+// 更新数据相关方法
+- (void)updateItems:(NSArray *)newItems;
+
 @end 

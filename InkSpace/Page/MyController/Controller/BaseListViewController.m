@@ -152,7 +152,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     HomeViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [DetailViewController showImage:cell.imgView.image fromImageView:cell.imgView completion:nil];
+    NSMutableArray *imageUrls = [NSMutableArray array];
+    for (HomeModel *model in self.items) {
+        if (model.url) {
+            [imageUrls addObject:model.url];
+        }
+    }
+    [DetailViewController showImages:imageUrls currentIndex:indexPath.row category:self.category currentPage:self.currentPage fromImageView:cell.imgView sourceViewController:self completion:nil];
+}
+
+- (void)scrollToItemAtIndex:(NSNumber *)index {
+    NSInteger rowIndex = [index integerValue];
+    if (rowIndex >= 0 && rowIndex < self.items.count) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+    }
 }
 
 #pragma mark - Helper Methods
@@ -374,6 +388,14 @@
 
 - (void)fetchMoreData:(void(^)(NSArray *fetchedArray))completion {
     // 子类必须实现
+}
+
+- (void)updateItems:(NSArray *)newItems {
+    // 更新数据源
+    [self.items addObjectsFromArray:newItems];
+    
+    // 刷新视图
+    [self.tableView reloadData];
 }
 
 @end

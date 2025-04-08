@@ -63,9 +63,13 @@
     
     // 根据DEBUG环境控制删除按钮显示
 #if DEBUG
-    self.delButton.hidden = NO;
+    self.delButton.hidden = YES;
+    self.likeButton.hidden = YES;
+    self.downloadBtn.hidden = YES;
 #else
     self.delButton.hidden = YES;
+    self.likeButton.hidden = YES;
+    self.downloadBtn.hidden = YES;
 #endif
     
     // 设置约束

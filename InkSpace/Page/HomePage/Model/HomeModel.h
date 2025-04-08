@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) unsigned int ID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *resolution;
-@property (nonatomic, copy) NSString *category;
+@property (nonatomic, assign) NSInteger category;
 @property (nonatomic, copy) NSString *desc;
 @property (nonatomic, copy) NSString *url;
 @property (nonatomic, assign) unsigned int favorite;

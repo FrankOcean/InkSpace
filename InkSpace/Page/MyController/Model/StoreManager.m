@@ -50,7 +50,7 @@
             @"id": @(model.ID),
             @"name": model.name ?: @"",
             @"resolution": model.resolution ?: @"",
-            @"category": model.category ?: @"",
+            @"category": @(model.category),
             @"description": model.desc ?: @"",
             @"url": model.url ?: @"",
             @"favorite": @(model.favorite)
@@ -70,7 +70,7 @@
             model.ID = [dict[@"id"] unsignedIntValue];
             model.name = dict[@"name"];
             model.resolution = dict[@"resolution"];
-            model.category = dict[@"category"];
+            model.category = [dict[@"category"] integerValue];
             model.desc = dict[@"description"];
             model.url = dict[@"url"];
             model.favorite = [dict[@"favorite"] unsignedIntValue];

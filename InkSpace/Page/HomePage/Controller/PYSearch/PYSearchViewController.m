@@ -7,7 +7,6 @@
 #import "PYSearchViewController.h"
 #import "PYSearchConst.h"
 #import "PYSearchSuggestionViewController.h"
-#import "HotViewController.h"
 
 #define PYRectangleTagMaxCol 3
 #define PYTextColor PYSEARCH_COLOR(113, 113, 113)

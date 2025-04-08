@@ -6,8 +6,12 @@
 //
 
 #import "DetailViewController.h"
+#import <SDWebImage/SDWebImageDownloader.h>
+#import "URLFetcher.h"
+#import "HomeModel.h"
+#import "BaseCollectionListViewController.h"
 
-@interface DetailViewController ()<UIScrollViewDelegate>
+@interface DetailViewController ()<UIScrollViewDelegate, UIPageViewControllerDelegate, UIPageViewControllerDataSource>
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImageView *imageView;
@@ -17,22 +21,26 @@
 @property (nonatomic, assign) CGRect sourceFrame;
 @property (nonatomic, assign) CGRect targetFrame;
 @property (nonatomic, assign) CGSize sourceImageSize;
+@property (nonatomic, strong) UIPageViewController *pageViewController;
+@property (nonatomic, strong) NSMutableArray<UIImageView *> *imageViews;
+@property (nonatomic, strong) NSMutableDictionary<NSNumber *, UIImage *> *imageCache;
 
 // 新增的UI元素
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, strong) UILabel *imageInfoLabel;
 @property (nonatomic, strong) UIButton *dismissButton;
+@property (nonatomic, strong) UIActivityIndicatorView *loadingIndicator;
+@property (nonatomic, strong) UILabel *loadingLabel;
 
 @end
 
 @implementation DetailViewController
 
-
-+ (void)showImage:(UIImage *)image fromImageView:(UIImageView *)sourceImageView completion:(PhotoViewCompletionBlock)completion {
-    if (!image) return;
-    
++ (void)showImage:(UIImage *)image fromImageView:(UIImageView *)sourceImageView completion:(nullable PhotoViewCompletionBlock)completion {
+    // 创建一个临时的 DetailViewController 来显示单个图片
     DetailViewController *photoVC = [[DetailViewController alloc] init];
-    photoVC.image = image;
+    photoVC.imageUrls = @[];
+    photoVC.currentIndex = 0;
     photoVC.sourceImageView = sourceImageView;
     photoVC.completionBlock = completion;
     photoVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
@@ -44,7 +52,47 @@
         UIWindow *window = [(UIWindowScene *)scene windows].firstObject;
         topVC = window.rootViewController;
     } else {
-        // 降级方案，用于不支持多场景的旧版本
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
+        #pragma clang diagnostic pop
+    }
+    
+    while (topVC.presentedViewController) {
+        topVC = topVC.presentedViewController;
+    }
+    
+    [topVC presentViewController:photoVC animated:NO completion:nil];
+    
+    // 设置单个图片
+    photoVC.image = image;
+    [photoVC setupSingleImageView];
+}
+
++ (void)showImages:(NSArray<NSString *> *)imageUrls currentIndex:(NSInteger)index fromImageView:(UIImageView *)sourceImageView sourceViewController:(id)sourceVC completion:(nullable PhotoViewCompletionBlock)completion {
+    [self showImages:imageUrls currentIndex:index category:0 currentPage:0 fromImageView:sourceImageView sourceViewController:sourceVC completion:completion];
+}
+
++ (void)showImages:(NSArray<NSString *> *)imageUrls currentIndex:(NSInteger)index category:(NSInteger)category currentPage:(NSInteger)currentPage fromImageView:(UIImageView *)sourceImageView sourceViewController:(id)sourceVC completion:(nullable PhotoViewCompletionBlock)completion {
+    if (!imageUrls.count) return;
+    
+    DetailViewController *photoVC = [[DetailViewController alloc] init];
+    photoVC.imageUrls = [NSMutableArray arrayWithArray:imageUrls];
+    photoVC.currentIndex = index;
+    photoVC.category = category;
+    photoVC.currentPage = currentPage;
+    photoVC.sourceImageView = sourceImageView;
+    photoVC.sourceViewController = sourceVC;
+    photoVC.completionBlock = completion;
+    photoVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    photoVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    UIViewController *topVC = nil;
+    UIScene *scene = [[UIApplication sharedApplication].connectedScenes anyObject];
+    if ([scene isKindOfClass:[UIWindowScene class]]) {
+        UIWindow *window = [(UIWindowScene *)scene windows].firstObject;
+        topVC = window.rootViewController;
+    } else {
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         topVC = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -64,39 +112,165 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor blackColor];
-    [self setupScrollView];
-    [self setupImageView];
+    self.imageCache = [NSMutableDictionary dictionary];
+    
+    // 根据是否有 imageUrls 来决定使用哪种方式显示图片
+    if (self.imageUrls.count > 0) {
+        [self setupPageViewController];
+    } else if (self.image) {
+        [self setupSingleImageView];
+    }
+    
     [self setupBottomView];
     [self setupGestureRecognizers];
+    [self setupLoadingIndicator];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)setupPageViewController {
+    self.pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationVertical options:nil];
+    self.pageViewController.dataSource = self;
+    self.pageViewController.delegate = self;
+    [self addChildViewController:self.pageViewController];
+    [self.view addSubview:self.pageViewController.view];
+    self.pageViewController.view.frame = self.view.bounds;
+    [self.pageViewController didMoveToParentViewController:self];
     
-    // 确保源 ImageView 已经完成布局
-    [self.sourceImageView.superview layoutIfNeeded];
+    // Set initial view controller
+    UIViewController *initialVC = [self viewControllerAtIndex:self.currentIndex];
+    [self.pageViewController setViewControllers:@[initialVC] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+}
+
+- (UIViewController *)viewControllerAtIndex:(NSInteger)index {
+    if (index < 0 || index >= self.imageUrls.count) {
+        return nil;
+    }
     
-    // 获取源图片在其容器中的实际显示尺寸
-    CGSize imageSize = self.image.size;
-    CGSize containerSize = self.sourceImageView.bounds.size;
-    CGFloat scale = MIN(containerSize.width / imageSize.width, containerSize.height / imageSize.height);
-    self.sourceImageSize = CGSizeMake(imageSize.width * scale, imageSize.height * scale);
+    UIViewController *pageVC = [[UIViewController alloc] init];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [pageVC.view addSubview:imageView];
     
-    // 计算源frame和目标frame
-    CGRect actualFrame = [self.sourceImageView.superview convertRect:self.sourceImageView.frame toView:nil];
+    // 加载图片
+    NSString *imageUrl = self.imageUrls[index];
+    [self loadImage:imageUrl forImageView:imageView];
     
-    // 计算居中的sourceFrame
-    CGFloat x = actualFrame.origin.x + (actualFrame.size.width - self.sourceImageSize.width) / 2;
-    CGFloat y = actualFrame.origin.y + (actualFrame.size.height - self.sourceImageSize.height) / 2;
-    self.sourceFrame = CGRectMake(x, y, self.sourceImageSize.width, self.sourceImageSize.height);
+    return pageVC;
+}
+
+- (void)loadImage:(NSString *)imageUrl forImageView:(UIImageView *)imageView {
+    // 检查缓存
+    NSNumber *key = @([self.imageUrls indexOfObject:imageUrl]);
+    UIImage *cachedImage = self.imageCache[key];
     
-    self.targetFrame = [self calculateTargetFrame];
+    if (cachedImage) {
+        imageView.image = cachedImage;
+        return;
+    }
     
-    // 设置初始位置
-    self.imageView.frame = self.sourceFrame;
+    // 显示加载指示器
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+    activityIndicator.center = imageView.center;
+    [imageView addSubview:activityIndicator];
+    [activityIndicator startAnimating];
     
-    // 执行展示动画
-    [self animateImagePresentation];
+    // 使用 thumbnail640URL 处理 URL
+    NSString *processedUrl = thumbnail640URL(imageUrl);
+    
+    // 下载图片
+    [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:processedUrl] options:SDWebImageDownloaderHighPriority progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+        [activityIndicator removeFromSuperview];
+        
+        if (image && finished) {
+            imageView.image = image;
+            self.imageCache[key] = image;
+            
+            // 更新底部信息
+            [self updateImageInfo:image];
+        } else {
+            // 显示错误占位图
+            imageView.image = [UIImage imageNamed:@"Default.png"];
+        }
+    }];
+}
+
+- (void)updateImageInfo:(UIImage *)image {
+    if (!image) return;
+    
+    NSString *dimensions = [NSString stringWithFormat:@"%dx%d", (int)image.size.width*2, (int)image.size.height*2];
+    float sizeInMB = image.size.width * image.size.height * 4 / (1024.0 * 1024.0); // 粗略估算
+    self.imageInfoLabel.text = [NSString stringWithFormat:@"尺寸: %@\n大小: %.1f MB", dimensions, sizeInMB];
+}
+
+#pragma mark - UIPageViewControllerDataSource
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController {
+    NSInteger index = [self indexOfViewController:viewController];
+    if (index == NSNotFound || index == 0) {
+        // 如果是第一个图片，尝试加载更多历史图片
+        if (self.category > 0 && !self.isLoadingMore) {
+            [self loadMoreImages:NO];
+            // 返回当前视图控制器，等待加载完成
+            return viewController;
+        }
+        // 只有在没有更多历史图片时才循环到最后一个
+        return [self viewControllerAtIndex:self.imageUrls.count - 1];
+    }
+    return [self viewControllerAtIndex:index - 1];
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
+    NSInteger index = [self indexOfViewController:viewController];
+    if (index == NSNotFound || index == self.imageUrls.count - 1) {
+        // 如果是最后一个图片，尝试加载更多图片
+        if (self.category > 0 && !self.isLoadingMore) {
+            [self loadMoreImages:YES];
+            // 返回当前视图控制器，等待加载完成
+            return viewController;
+        }
+        // 只有在没有更多图片时才循环到第一个
+        return [self viewControllerAtIndex:0];
+    }
+    return [self viewControllerAtIndex:index + 1];
+}
+
+- (NSInteger)indexOfViewController:(UIViewController *)viewController {
+    UIImageView *imageView = viewController.view.subviews.firstObject;
+//    NSString *imageUrl = self.imageUrls[self.currentIndex];
+    
+    // 检查当前图片是否已加载
+    if (imageView.image) {
+        for (NSInteger i = 0; i < self.imageUrls.count; i++) {
+//            NSString *url = self.imageUrls[i];
+            NSNumber *key = @(i);
+            UIImage *cachedImage = self.imageCache[key];
+            
+            if (cachedImage == imageView.image) {
+                return i;
+            }
+        }
+    }
+    
+    return self.currentIndex;
+}
+
+#pragma mark - UIPageViewControllerDelegate
+
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed {
+    if (completed) {
+        UIViewController *currentVC = pageViewController.viewControllers.firstObject;
+        NSInteger newIndex = [self indexOfViewController:currentVC];
+        if (newIndex != self.currentIndex) {
+            self.currentIndex = newIndex;
+            [self updateSourceViewControllerPosition];
+        }
+    }
+}
+
+- (void)updateSourceViewControllerPosition {
+    if ([self.sourceViewController isKindOfClass:[BaseCollectionListViewController class]]) {
+        BaseCollectionListViewController *collectionVC = (BaseCollectionListViewController *)self.sourceViewController;
+        [collectionVC scrollToItemAtIndex:@(self.currentIndex)];
+    }
 }
 
 #pragma mark - Setup Methods
@@ -193,18 +367,8 @@
 #pragma mark - Layout Methods
 
 - (CGRect)calculateTargetFrame {
-    CGSize imageSize = self.image.size;
-    CGSize boundsSize = self.view.bounds.size;
-    
-    CGFloat xScale = boundsSize.width / imageSize.width;
-    CGFloat yScale = boundsSize.height / imageSize.height;
-    CGFloat minScale = MIN(xScale, yScale);
-    
-    CGSize scaledSize = CGSizeMake(imageSize.width * minScale, imageSize.height * minScale);
-    CGFloat x = (boundsSize.width - scaledSize.width) / 2.0;
-    CGFloat y = (boundsSize.height - scaledSize.height) / 2.0;
-    
-    return CGRectMake(x, y, scaledSize.width, scaledSize.height);
+    // 这个方法不再需要，因为我们使用 UIPageViewController 来管理图片视图
+    return self.view.bounds;
 }
 
 #pragma mark - Animation Methods
@@ -393,6 +557,127 @@
     }
     
     self.imageView.frame = frameToCenter;
+}
+
+- (void)setupSingleImageView {
+    // 设置单个图片视图
+    self.imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.imageView.image = self.image;
+    [self.view addSubview:self.imageView];
+    
+    // 更新底部信息
+    [self updateImageInfo:self.image];
+}
+
+- (void)loadMoreImages:(BOOL)isLoadingNext {
+    if (self.isLoadingMore) return;
+    
+    self.isLoadingMore = YES;
+    
+    // 显示加载指示器
+    [self showLoadingIndicator];
+    
+    // 获取更多图片
+    [[URLFetcher sharedInstance] fetchURLsWithCategory:self.category andCurrentId:self.currentPage andCompletion:^(NSArray * _Nonnull fetchedArray) {
+        [self hideLoadingIndicator];
+        self.isLoadingMore = NO;
+        
+        if (fetchedArray.count > 0) {
+            self.currentPage += 1;
+            
+            // 提取 URL 并去重
+            NSMutableArray *newUrls = [NSMutableArray array];
+            NSMutableSet *existingUrls = [NSMutableSet setWithArray:self.imageUrls];
+            
+            for (HomeModel *model in fetchedArray) {
+                if (model.url && ![existingUrls containsObject:model.url]) {
+                    [newUrls addObject:model.url];
+                    [existingUrls addObject:model.url];
+                }
+            }
+            
+            // 如果没有新的URL，不更新
+            if (newUrls.count == 0) {
+                return;
+            }
+            
+            // 更新图片数组
+            NSMutableArray *updatedUrls = [NSMutableArray arrayWithArray:self.imageUrls];
+            if (isLoadingNext) {
+                [updatedUrls addObjectsFromArray:newUrls];
+            } else {
+                NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, newUrls.count)];
+                [updatedUrls insertObjects:newUrls atIndexes:indexes];
+                self.currentIndex += newUrls.count;
+            }
+            self.imageUrls = updatedUrls;
+            
+            // 更新源视图控制器
+            if ([self.sourceViewController isKindOfClass:[BaseCollectionListViewController class]]) {
+                BaseCollectionListViewController *collectionVC = (BaseCollectionListViewController *)self.sourceViewController;
+                [collectionVC updateItems:fetchedArray];
+            }
+        }
+    }];
+}
+
+- (void)setupLoadingIndicator {
+    // 创建加载指示器容器
+    UIView *loadingContainer = [[UIView alloc] init];
+    loadingContainer.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
+    loadingContainer.layer.cornerRadius = 10;
+    [self.view addSubview:loadingContainer];
+    
+    // 设置约束
+    loadingContainer.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [loadingContainer.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [loadingContainer.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
+        [loadingContainer.widthAnchor constraintEqualToConstant:120],
+        [loadingContainer.heightAnchor constraintEqualToConstant:80]
+    ]];
+    
+    // 创建加载指示器
+    self.loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [loadingContainer addSubview:self.loadingIndicator];
+    
+    // 设置加载指示器约束
+    self.loadingIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.loadingIndicator.centerXAnchor constraintEqualToAnchor:loadingContainer.centerXAnchor],
+        [self.loadingIndicator.topAnchor constraintEqualToAnchor:loadingContainer.topAnchor constant:15]
+    ]];
+    
+    // 创建加载标签
+    self.loadingLabel = [[UILabel alloc] init];
+    self.loadingLabel.text = @"加载中...";
+    self.loadingLabel.textColor = [UIColor whiteColor];
+    self.loadingLabel.font = [UIFont systemFontOfSize:14];
+    self.loadingLabel.textAlignment = NSTextAlignmentCenter;
+    [loadingContainer addSubview:self.loadingLabel];
+    
+    // 设置加载标签约束
+    self.loadingLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [self.loadingLabel.centerXAnchor constraintEqualToAnchor:loadingContainer.centerXAnchor],
+        [self.loadingLabel.topAnchor constraintEqualToAnchor:self.loadingIndicator.bottomAnchor constant:10],
+        [self.loadingLabel.leadingAnchor constraintEqualToAnchor:loadingContainer.leadingAnchor constant:10],
+        [self.loadingLabel.trailingAnchor constraintEqualToAnchor:loadingContainer.trailingAnchor constant:-10]
+    ]];
+    
+    // 初始状态隐藏
+    loadingContainer.hidden = YES;
+}
+
+- (void)showLoadingIndicator {
+    self.loadingIndicator.superview.hidden = NO;
+    [self.loadingIndicator startAnimating];
+}
+
+- (void)hideLoadingIndicator {
+    [self.loadingIndicator stopAnimating];
+    self.loadingIndicator.superview.hidden = YES;
 }
 
 @end

@@ -8,7 +8,9 @@
 #import "CollectionViewController.h"
 #import "URLFetcher.h"
 
-@implementation CollectionViewController
+@implementation CollectionViewController {
+    NSUInteger _category;
+}
 
 - (instancetype)initWithCategory:(NSUInteger)category {
     self = [super init];
@@ -20,14 +22,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.history_id = [HomeModel getHistoricIDForCategory:self.category];
+    self.history_id = [HomeModel getHistoricIDForCategory:_category];
 }
 
 #pragma mark - BaseCollectionListViewController
 
 - (void)fetchInitialData:(void(^)(NSArray *fetchedArray))completion {
     self.currentPage = 1;
-    [[URLFetcher sharedInstance] fetchURLsWithCategory:self.category andCompletion:^(NSArray * _Nonnull fetchedArray) {
+    [[URLFetcher sharedInstance] fetchURLsWithCategory:_category andCompletion:^(NSArray * _Nonnull fetchedArray) {
         HomeModel *model = [fetchedArray lastObject];
         self.currentPage = model.ID;
         if (completion) {
@@ -38,7 +40,7 @@
 }
 
 - (void)fetchMoreData:(void(^)(NSArray *fetchedArray))completion {
-    [[URLFetcher sharedInstance] fetchURLsWithCategory:self.category andCurrentId:self.currentPage andCompletion:^(NSArray * _Nonnull fetchedArray) {
+    [[URLFetcher sharedInstance] fetchURLsWithCategory:_category andCurrentId:self.currentPage andCompletion:^(NSArray * _Nonnull fetchedArray) {
         HomeModel *model = [fetchedArray lastObject];
         self.currentPage = model.ID;
         if (completion) {
@@ -65,7 +67,7 @@
         }
         HomeModel *model = self.items[indexPath.item];
         if(model.ID >= self.history_id) {
-            [HomeModel setHistoricID:model.ID forCategory:self.category];
+            [HomeModel setHistoricID:model.ID forCategory:_category];
         }
     }
 }
