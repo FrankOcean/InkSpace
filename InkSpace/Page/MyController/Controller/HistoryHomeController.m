@@ -6,7 +6,7 @@
 //
 
 #import "HistoryHomeController.h"
-#import "HistoryViewController.h"
+#import "HistoryCollectionViewController.h"
 #import "HomeModel.h"
 #import "HomeViewCell.h"
 
@@ -66,7 +66,7 @@
     } else if ([selectedItem isEqualToString:@"美女"]) {
         category = 0;
     }
-    HistoryViewController *hisVC = [[HistoryViewController alloc] init];
+    HistoryCollectionViewController *hisVC = [[HistoryCollectionViewController alloc] init];
     hisVC.category = category;
     [self.navigationController pushViewController:hisVC animated:YES];
     

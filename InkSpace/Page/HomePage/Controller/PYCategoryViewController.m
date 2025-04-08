@@ -1,7 +1,7 @@
 #import "PYCategoryViewController.h"
 #import "PYCategoryView.h"
-#import "ViewController.h"
-#import "HotViewController.h"
+#import "CollectionViewController.h"
+#import "HotCollectionViewController.h"
 #import "BaseNavigationViewController.h"
 #import "PYSearch.h"
 #import "MyViewController.h"
@@ -34,12 +34,12 @@
     self.view.backgroundColor = [UIColor whiteColor];
     _titles = @[@"最新", @"最热", @"超清", @"人物", @"动漫", @"美女"];
     _viewControllers = @[
-        [[HotViewController alloc] initWithCategory:ContentTypeNewest],
-        [[HotViewController alloc] initWithCategory:ContentTypeHottest],
-        [[ViewController alloc] initWithCategory:2],
-        [[ViewController alloc] initWithCategory:3],
-        [[ViewController alloc] initWithCategory:1],
-        [[ViewController alloc] initWithCategory:0]
+        [[HotCollectionViewController alloc] initWithCategory:ContentTypeNewest],
+        [[HotCollectionViewController alloc] initWithCategory:ContentTypeHottest],
+        [[CollectionViewController alloc] initWithCategory:2],
+        [[CollectionViewController alloc] initWithCategory:3],
+        [[CollectionViewController alloc] initWithCategory:1],
+        [[CollectionViewController alloc] initWithCategory:0]
     ];
     [self setupUI];
 }
@@ -122,11 +122,12 @@
 }
 
 #pragma mark - PYSearchViewControllerDelegate
+
 - (void)searchViewController:(PYSearchViewController *)searchViewController didSearchWithSearchBar:(UISearchBar *)searchBar searchText:(NSString *)searchText {
-    HotViewController *hot = [[HotViewController alloc] init];
+    HotCollectionViewController *hot = [[HotCollectionViewController alloc] init];
     hot.contentType = ContentTypeSearch;
     hot.content = searchText;
-    searchViewController.searchResultController = hot;
+    [searchViewController.navigationController pushViewController:hot animated:YES];
 }
 
 #pragma mark - UIScrollViewDelegate

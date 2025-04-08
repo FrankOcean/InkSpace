@@ -41,6 +41,13 @@
 		31E0AC1B2C1C67C0008F6564 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31E0AC1A2C1C67C0008F6564 /* Assets.xcassets */; };
 		31E0AC1E2C1C67C0008F6564 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 31E0AC1C2C1C67C0008F6564 /* LaunchScreen.storyboard */; };
 		31E0AC212C1C67C0008F6564 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E0AC202C1C67C0008F6564 /* main.m */; };
+		31E5FDB42D9D1C1500EDE3D6 /* HomeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E5FDB32D9D1C1500EDE3D6 /* HomeCollectionViewCell.m */; };
+		31E5FDBD2D9D270C00EDE3D6 /* HotCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E5FDBC2D9D270C00EDE3D6 /* HotCollectionViewController.m */; };
+		31E5FDBE2D9D270C00EDE3D6 /* CollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E5FDBA2D9D270C00EDE3D6 /* CollectionViewController.m */; };
+		31E5FDBF2D9D270C00EDE3D6 /* BaseCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E5FDB82D9D270C00EDE3D6 /* BaseCollectionViewController.m */; };
+		31E5FDC02D9D270C00EDE3D6 /* BaseCollectionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E5FDB62D9D270C00EDE3D6 /* BaseCollectionListViewController.m */; };
+		31E5FDC32D9D274300EDE3D6 /* HistoryCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E5FDC22D9D274300EDE3D6 /* HistoryCollectionViewController.m */; };
+		31E5FDC62D9D2FB500EDE3D6 /* WaterfallFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 31E5FDC52D9D2FB500EDE3D6 /* WaterfallFlowLayout.m */; };
 		31FCA5DB2C986DAA008FFE5F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31FCA5DA2C986DAA008FFE5F /* Security.framework */; };
 		36287347A2C8C75CA6CE8874 /* Pods_InkSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 209B468165B9648BB48FC959 /* Pods_InkSpace.framework */; };
 /* End PBXBuildFile section */
@@ -111,6 +118,20 @@
 		31E0AC1D2C1C67C0008F6564 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		31E0AC1F2C1C67C0008F6564 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		31E0AC202C1C67C0008F6564 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		31E5FDB22D9D1C1500EDE3D6 /* HomeCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeCollectionViewCell.h; sourceTree = "<group>"; };
+		31E5FDB32D9D1C1500EDE3D6 /* HomeCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeCollectionViewCell.m; sourceTree = "<group>"; };
+		31E5FDB52D9D270C00EDE3D6 /* BaseCollectionListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseCollectionListViewController.h; sourceTree = "<group>"; };
+		31E5FDB62D9D270C00EDE3D6 /* BaseCollectionListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseCollectionListViewController.m; sourceTree = "<group>"; };
+		31E5FDB72D9D270C00EDE3D6 /* BaseCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseCollectionViewController.h; sourceTree = "<group>"; };
+		31E5FDB82D9D270C00EDE3D6 /* BaseCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseCollectionViewController.m; sourceTree = "<group>"; };
+		31E5FDB92D9D270C00EDE3D6 /* CollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewController.h; sourceTree = "<group>"; };
+		31E5FDBA2D9D270C00EDE3D6 /* CollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewController.m; sourceTree = "<group>"; };
+		31E5FDBB2D9D270C00EDE3D6 /* HotCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotCollectionViewController.h; sourceTree = "<group>"; };
+		31E5FDBC2D9D270C00EDE3D6 /* HotCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HotCollectionViewController.m; sourceTree = "<group>"; };
+		31E5FDC12D9D274300EDE3D6 /* HistoryCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistoryCollectionViewController.h; sourceTree = "<group>"; };
+		31E5FDC22D9D274300EDE3D6 /* HistoryCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HistoryCollectionViewController.m; sourceTree = "<group>"; };
+		31E5FDC42D9D2FB500EDE3D6 /* WaterfallFlowLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WaterfallFlowLayout.h; sourceTree = "<group>"; };
+		31E5FDC52D9D2FB500EDE3D6 /* WaterfallFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WaterfallFlowLayout.m; sourceTree = "<group>"; };
 		31FCA5DA2C986DAA008FFE5F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		90F993BC9C6B600B39591329 /* Pods-InkSpace.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InkSpace.release.xcconfig"; path = "Target Support Files/Pods-InkSpace/Pods-InkSpace.release.xcconfig"; sourceTree = "<group>"; };
 		DA21FAD5503652388FA1BAF6 /* Pods-InkSpace.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InkSpace.debug.xcconfig"; path = "Target Support Files/Pods-InkSpace/Pods-InkSpace.debug.xcconfig"; sourceTree = "<group>"; };
@@ -170,6 +191,8 @@
 		3134E4722C92E70F00B9081A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				31E5FDC12D9D274300EDE3D6 /* HistoryCollectionViewController.h */,
+				31E5FDC22D9D274300EDE3D6 /* HistoryCollectionViewController.m */,
 				3134E4732C92E74F00B9081A /* MyViewController.h */,
 				3134E4742C92E74F00B9081A /* MyViewController.m */,
 				3127E0F62C96F35000A7A20B /* StoreViewController.h */,
@@ -256,6 +279,8 @@
 		315201222C1DC879002DC2B1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				31E5FDB22D9D1C1500EDE3D6 /* HomeCollectionViewCell.h */,
+				31E5FDB32D9D1C1500EDE3D6 /* HomeCollectionViewCell.m */,
 				315201252C1DC92E002DC2B1 /* HomeViewCell.h */,
 				315201262C1DC92E002DC2B1 /* HomeViewCell.m */,
 				315201272C1DC92E002DC2B1 /* HomeViewCell.xib */,
@@ -269,6 +294,16 @@
 			isa = PBXGroup;
 			children = (
 				3116C04B2C95A0FB00093CFA /* PYSearch */,
+				31E5FDC42D9D2FB500EDE3D6 /* WaterfallFlowLayout.h */,
+				31E5FDC52D9D2FB500EDE3D6 /* WaterfallFlowLayout.m */,
+				31E5FDB52D9D270C00EDE3D6 /* BaseCollectionListViewController.h */,
+				31E5FDB62D9D270C00EDE3D6 /* BaseCollectionListViewController.m */,
+				31E5FDB72D9D270C00EDE3D6 /* BaseCollectionViewController.h */,
+				31E5FDB82D9D270C00EDE3D6 /* BaseCollectionViewController.m */,
+				31E5FDB92D9D270C00EDE3D6 /* CollectionViewController.h */,
+				31E5FDBA2D9D270C00EDE3D6 /* CollectionViewController.m */,
+				31E5FDBB2D9D270C00EDE3D6 /* HotCollectionViewController.h */,
+				31E5FDBC2D9D270C00EDE3D6 /* HotCollectionViewController.m */,
 				319675632D325C08004AF4BD /* PYCategoryViewController.h */,
 				319675642D325C08004AF4BD /* PYCategoryViewController.m */,
 				31B90CF92D31593300639C3D /* BaseTableViewController.h */,
@@ -505,6 +540,7 @@
 				314659B12C1FE39800B01B5F /* URLFetcher.m in Sources */,
 				314CC4492C87190600BF037B /* DetailViewController.m in Sources */,
 				3127E1062C97030D00A7A20B /* HistoryHomeController.m in Sources */,
+				31E5FDB42D9D1C1500EDE3D6 /* HomeCollectionViewCell.m in Sources */,
 				3127E0F82C96F35000A7A20B /* StoreViewController.m in Sources */,
 				3127E1002C9701F700A7A20B /* HistoryViewController.m in Sources */,
 				319675652D325C08004AF4BD /* PYCategoryViewController.m in Sources */,
@@ -514,12 +550,18 @@
 				3116C04C2C95A0FC00093CFA /* NSBundle+PYSearchExtension.m in Sources */,
 				3116C04E2C95A0FC00093CFA /* PYSearchSuggestionViewController.m in Sources */,
 				3127E0FB2C96F50E00A7A20B /* StoreManager.m in Sources */,
+				31E5FDC32D9D274300EDE3D6 /* HistoryCollectionViewController.m in Sources */,
 				3134E4752C92E74F00B9081A /* MyViewController.m in Sources */,
 				314231792C91889800075644 /* BaseNavigationViewController.m in Sources */,
 				3152012C2C1DD6AF002DC2B1 /* HomeModel.m in Sources */,
 				31E0AC212C1C67C0008F6564 /* main.m in Sources */,
 				315201292C1DC92E002DC2B1 /* HomeViewCell.m in Sources */,
 				31E0AC132C1C67BF008F6564 /* SceneDelegate.m in Sources */,
+				31E5FDBD2D9D270C00EDE3D6 /* HotCollectionViewController.m in Sources */,
+				31E5FDBE2D9D270C00EDE3D6 /* CollectionViewController.m in Sources */,
+				31E5FDC62D9D2FB500EDE3D6 /* WaterfallFlowLayout.m in Sources */,
+				31E5FDBF2D9D270C00EDE3D6 /* BaseCollectionViewController.m in Sources */,
+				31E5FDC02D9D270C00EDE3D6 /* BaseCollectionListViewController.m in Sources */,
 				3116C04F2C95A0FC00093CFA /* PYSearchViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
