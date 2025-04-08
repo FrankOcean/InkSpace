@@ -238,7 +238,7 @@
 
 // 设置瀑布流的内边距
 - (UIEdgeInsets)edgeInsetsInWaterfallLayout:(UICollectionViewLayout *)layout {
-    return UIEdgeInsetsMake(0, 0, 0, 0);
+    return UIEdgeInsetsMake(0, 15, 0, 15);
 }
 
 // 设置瀑布流的列数
@@ -248,12 +248,12 @@
 
 // 设置瀑布流的行间距
 - (CGFloat)rowMarginInWaterfallLayout:(UICollectionViewLayout *)layout {
-    return 0.0;
+    return 10.0;
 }
 
 // 设置瀑布流的列间距
 - (CGFloat)columnMarginInWaterfallLayout:(UICollectionViewLayout *)layout {
-    return 0.0;
+    return 10.0;
 }
 
 - (void)fetchMoreData:(void (^__strong)(NSArray *__strong))completion {

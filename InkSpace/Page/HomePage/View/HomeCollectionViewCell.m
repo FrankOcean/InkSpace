@@ -86,9 +86,9 @@
     // imgView约束
     [NSLayoutConstraint activateConstraints:@[
         [self.imgView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
-        [self.imgView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:20],
-        [self.imgView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-20],
-        [self.imgView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-25]
+        [self.imgView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
+        [self.imgView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor],
+        [self.imgView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:0]
     ]];
     
     // backImgView约束
