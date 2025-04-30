@@ -13,9 +13,8 @@
  */
 
 #import <UIKit/UIKit.h>
-#import "JXCategoryListContainerView.h"
 
-@interface BaseTableViewController : UIViewController <JXCategoryListContentViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface BaseTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (nonatomic, assign) CGFloat topOffset;

@@ -15,7 +15,6 @@
 		3116C0512C95A0FC00093CFA /* UIView+PYSearchExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 3116C04A2C95A0FB00093CFA /* UIView+PYSearchExtension.m */; };
 		3127E0F82C96F35000A7A20B /* StoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3127E0F72C96F35000A7A20B /* StoreViewController.m */; };
 		3127E0FB2C96F50E00A7A20B /* StoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3127E0FA2C96F50E00A7A20B /* StoreManager.m */; };
-		3127E1002C9701F700A7A20B /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3127E0FF2C9701F700A7A20B /* HistoryViewController.m */; };
 		3127E1062C97030D00A7A20B /* HistoryHomeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3127E1052C97030D00A7A20B /* HistoryHomeController.m */; };
 		3134E46F2C92DDD600B9081A /* gradient_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 3134E46E2C92DDD600B9081A /* gradient_image.png */; };
 		3134E4752C92E74F00B9081A /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3134E4742C92E74F00B9081A /* MyViewController.m */; };
@@ -29,6 +28,7 @@
 		3152012C2C1DD6AF002DC2B1 /* HomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3152012B2C1DD6AF002DC2B1 /* HomeModel.m */; };
 		319675622D325BEC004AF4BD /* PYCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 319675612D325BEC004AF4BD /* PYCategoryView.m */; };
 		319675652D325C08004AF4BD /* PYCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 319675642D325C08004AF4BD /* PYCategoryViewController.m */; };
+		319986202DA56DA900A91BB2 /* DetailImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3199861F2DA56DA900A91BB2 /* DetailImageCell.m */; };
 		31B90CEF2D311CA000639C3D /* user_agreement.html in Resources */ = {isa = PBXBuildFile; fileRef = 31B90CEE2D311CA000639C3D /* user_agreement.html */; };
 		31B90CF52D311F4600639C3D /* UserAgreementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B90CF42D311F4600639C3D /* UserAgreementViewController.m */; };
 		31B90CFB2D31593300639C3D /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B90CFA2D31593300639C3D /* BaseTableViewController.m */; };
@@ -69,8 +69,6 @@
 		3127E0F72C96F35000A7A20B /* StoreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoreViewController.m; sourceTree = "<group>"; };
 		3127E0F92C96F50E00A7A20B /* StoreManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StoreManager.h; sourceTree = "<group>"; };
 		3127E0FA2C96F50E00A7A20B /* StoreManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoreManager.m; sourceTree = "<group>"; };
-		3127E0FE2C9701F700A7A20B /* HistoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
-		3127E0FF2C9701F700A7A20B /* HistoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		3127E1042C97030D00A7A20B /* HistoryHomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistoryHomeController.h; sourceTree = "<group>"; };
 		3127E1052C97030D00A7A20B /* HistoryHomeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HistoryHomeController.m; sourceTree = "<group>"; };
 		3134E46E2C92DDD600B9081A /* gradient_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient_image.png; sourceTree = "<group>"; };
@@ -95,6 +93,8 @@
 		319675612D325BEC004AF4BD /* PYCategoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYCategoryView.m; sourceTree = "<group>"; };
 		319675632D325C08004AF4BD /* PYCategoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PYCategoryViewController.h; sourceTree = "<group>"; };
 		319675642D325C08004AF4BD /* PYCategoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PYCategoryViewController.m; sourceTree = "<group>"; };
+		3199861E2DA56DA900A91BB2 /* DetailImageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailImageCell.h; sourceTree = "<group>"; };
+		3199861F2DA56DA900A91BB2 /* DetailImageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailImageCell.m; sourceTree = "<group>"; };
 		31B90CEE2D311CA000639C3D /* user_agreement.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = user_agreement.html; sourceTree = "<group>"; };
 		31B90CF32D311F4600639C3D /* UserAgreementViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserAgreementViewController.h; sourceTree = "<group>"; };
 		31B90CF42D311F4600639C3D /* UserAgreementViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserAgreementViewController.m; sourceTree = "<group>"; };
@@ -198,8 +198,6 @@
 				3127E0F72C96F35000A7A20B /* StoreViewController.m */,
 				3127E1042C97030D00A7A20B /* HistoryHomeController.h */,
 				3127E1052C97030D00A7A20B /* HistoryHomeController.m */,
-				3127E0FE2C9701F700A7A20B /* HistoryViewController.h */,
-				3127E0FF2C9701F700A7A20B /* HistoryViewController.m */,
 				31B90CF32D311F4600639C3D /* UserAgreementViewController.h */,
 				31B90CF42D311F4600639C3D /* UserAgreementViewController.m */,
 			);
@@ -229,6 +227,7 @@
 		314CC4442C87181800BF037B /* DetailPage */ = {
 			isa = PBXGroup;
 			children = (
+				3199861D2DA56C7A00A91BB2 /* View */,
 				314CC44B2C87190C00BF037B /* Controller */,
 			);
 			path = DetailPage;
@@ -337,6 +336,15 @@
 				315201252C1DC92E002DC2B1 /* HomeViewCell.h */,
 				315201262C1DC92E002DC2B1 /* HomeViewCell.m */,
 				315201272C1DC92E002DC2B1 /* HomeViewCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3199861D2DA56C7A00A91BB2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3199861E2DA56DA900A91BB2 /* DetailImageCell.h */,
+				3199861F2DA56DA900A91BB2 /* DetailImageCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -529,6 +537,7 @@
 			files = (
 				31B90CF52D311F4600639C3D /* UserAgreementViewController.m in Sources */,
 				31E0AC102C1C67BF008F6564 /* AppDelegate.m in Sources */,
+				319986202DA56DA900A91BB2 /* DetailImageCell.m in Sources */,
 				31B90CFE2D31624C00639C3D /* BaseListViewController.m in Sources */,
 				3116C0512C95A0FC00093CFA /* UIView+PYSearchExtension.m in Sources */,
 				314231762C91888A00075644 /* UIWindow+JXSafeArea.m in Sources */,
@@ -539,7 +548,6 @@
 				3127E1062C97030D00A7A20B /* HistoryHomeController.m in Sources */,
 				31E5FDB42D9D1C1500EDE3D6 /* HomeCollectionViewCell.m in Sources */,
 				3127E0F82C96F35000A7A20B /* StoreViewController.m in Sources */,
-				3127E1002C9701F700A7A20B /* HistoryViewController.m in Sources */,
 				319675652D325C08004AF4BD /* PYCategoryViewController.m in Sources */,
 				3116C04D2C95A0FC00093CFA /* PYSearchConst.m in Sources */,
 				319675622D325BEC004AF4BD /* PYCategoryView.m in Sources */,
